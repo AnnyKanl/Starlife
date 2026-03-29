@@ -3,55 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生命蓝图 · 诊断版</title>
+    <title>生命蓝图 · 宿命解析</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         :root { --gold: #b38b4d; --ink: #1a1a1a; --paper: #f9f6f2; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #cfcfcf; font-family: 'Noto Serif SC', serif; color: var(--ink); padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .main-container { max-width: 500px; width: 100%; background: var(--paper); box-shadow: 0 10px 50px rgba(0,0,0,0.2); padding: 40px 20px; }
-        .config-panel { background: #fff; padding: 20px; border: 1px solid #eee; margin-bottom: 25px; }
-        h1 { text-align: center; letter-spacing: 5px; margin-bottom: 30px; color: var(--gold); font-size: 22px; }
-        .field { margin-bottom: 15px; }
-        label { display: block; font-size: 11px; color: #999; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; border: 1px solid #eee; background: #fafafa; outline: none; }
-        .btn-main { width: 100%; padding: 16px; background: var(--ink); color: #fff; border: none; cursor: pointer; font-weight: 600; }
+        body { background: #dcdcdc; font-family: 'Noto Serif SC', serif; color: var(--ink); padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .main-container { max-width: 500px; width: 100%; background: var(--paper); box-shadow: 0 10px 50px rgba(0,0,0,0.3); padding: 40px 20px; border-radius: 2px; }
+        .config-panel { background: #fff; padding: 25px; border: 1px solid #eee; margin-bottom: 25px; }
+        h1 { text-align: center; letter-spacing: 6px; margin-bottom: 30px; color: var(--gold); font-size: 24px; font-weight: 600; }
+        .field { margin-bottom: 18px; }
+        label { display: block; font-size: 11px; color: #999; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+        input { width: 100%; padding: 12px; border: 1px solid #eee; background: #fafafa; outline: none; font-family: inherit; }
+        input:focus { border-color: var(--gold); background: #fff; }
+        .btn-main { width: 100%; padding: 18px; background: var(--ink); color: #fff; border: none; cursor: pointer; letter-spacing: 3px; font-weight: 600; transition: 0.3s; }
+        .btn-main:hover { background: var(--gold); }
         
-        /* 诊断日志区 - 这是排错核心 */
+        #report-container { display: none; padding: 40px 25px; background: var(--paper); border: 1px solid #f0f0f0; }
+        .report-header { text-align: center; border-bottom: 1.5px solid var(--gold); padding-bottom: 30px; margin-bottom: 40px; }
+        .report-title { font-size: 26px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+        .report-subtitle { font-size: 12px; color: #999; letter-spacing: 2px; }
+        .module-content { line-height: 2.2; font-size: 15.5px; color: #333; text-align: justify; margin-bottom: 20px; }
+        
         #debug-console { 
             width: 100%; max-width: 500px; margin-top: 20px; padding: 15px; 
-            background: #1e1e1e; color: #00ff00; font-family: monospace; font-size: 12px; 
-            border-radius: 5px; overflow-x: auto; display: block;
+            background: #1e1e1e; color: #00ff00; font-family: monospace; font-size: 11px; 
+            border-radius: 4px; overflow: hidden; display: block; opacity: 0.8;
         }
-        .log-item { margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .log-error { color: #ff5555; }
-
-        #report-container { display: none; padding: 35px 20px; background: var(--paper); border: 1px solid #eee; }
-        #save-image-btn { display: none; width: 100%; padding: 16px; background: var(--gold); color: #fff; border: none; margin-top: 20px; }
+        .log-item { border-bottom: 1px solid #333; padding: 4px 0; }
+        .log-error { color: #ff6b6b; font-weight: bold; }
+        #loader { display: none; text-align: center; color: var(--gold); margin: 20px 0; font-size: 14px; letter-spacing: 1px; }
+        #save-image-btn { display: none; width: 100%; padding: 18px; background: var(--gold); color: #fff; border: none; margin-top: 20px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="main-container">
     <h1>LIFE BLUEPRINT</h1>
+    
     <div class="config-panel" id="input-panel">
         <div class="field"><label>称呼</label><input type="text" id="name" placeholder="Name"></div>
         <div class="field"><label>出生日期</label><input type="date" id="date"></div>
         <div class="field"><label>准确时间</label><input type="time" id="time"></div>
         <div class="field"><label>出生城市</label><input type="text" id="city" placeholder="Shanghai / Sao Paulo"></div>
         <div class="field"><label>DeepSeek Key</label><input type="password" id="key" placeholder="sk-..."></div>
-        <button class="btn-main" onclick="run()">同步数据并排错</button>
+        <button class="btn-main" onclick="run()">开始同步星辰能量</button>
     </div>
 
+    <div id="loader">「 正在校准多维度坐标，调取生命原始序列 」</div>
+
     <div id="report-container">
+        <div class="report-header">
+            <div class="report-title" id="out-name"></div>
+            <div class="report-subtitle">生命蓝图 · 深度能量解析报告</div>
+        </div>
         <div id="report-body"></div>
+        <div style="text-align: center; font-size: 11px; color: #ccc; margin-top: 70px; letter-spacing: 2px;">
+            每一行文字，都是与深层自我的对话
+        </div>
     </div>
-    <button id="save-image-btn" onclick="takeScreenshot()">保存长图</button>
+
+    <button id="save-image-btn" onclick="takeScreenshot()">保存为精美长图 (分享)</button>
 </div>
 
 <div id="debug-console">
-    <div class="log-item">系统就绪，等待输入...</div>
+    <div class="log-item">系统环境就绪...</div>
 </div>
 
 <script>
@@ -59,7 +76,7 @@
         const consoleEl = document.getElementById('debug-console');
         const div = document.createElement('div');
         div.className = 'log-item' + (isError ? ' log-error' : '');
-        div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        div.textContent = `> ${msg}`;
         consoleEl.prepend(div);
     }
 
@@ -69,80 +86,93 @@
         const date = document.getElementById('date').value;
         const time = document.getElementById('time').value;
 
-        log("开始任务...");
-        if(!key || !city || !date || !time) { log("错误：信息不全", true); return; }
+        if(!key || !city || !date || !time) return alert("请先填写完整信息。");
+
+        document.getElementById('input-panel').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+        log(`正在检索城市坐标: ${city}`);
 
         try {
             // 1. 定位
-            log(`正在搜寻城市: ${city}`);
             const geoResp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`);
             const geoData = await geoResp.json();
-            if(!geoData.length) throw new Error("城市定位失败");
+            if(!geoData.length) throw new Error("无法定位城市，请尝试输入英文名称。");
             
-            const lon = parseFloat(geoData[0].lon);
-            const lat = parseFloat(geoData[0].lat);
+            const lon = parseFloat(geoData[0].lon).toFixed(4);
+            const lat = parseFloat(geoData[0].lat).toFixed(4);
             const offset = Math.round(lon / 15);
             const tz = (offset >= 0 ? "+" : "-") + Math.abs(offset).toString().padStart(2, '0') + ":00";
-            log(`坐标确定: ${lat}, ${lon}，估算时区: ${tz}`);
+            log(`定位成功: ${lat}, ${lon} (时区 ${tz})`);
 
-            // 2. 占星数据 (最容易报错的地方)
+            // 2. 获取占星数据 (URL 已修正)
             const [y, m, d] = date.split('-');
             const encodedTz = encodeURIComponent(tz);
-            const astroUrl = `https://api.vedastro.org/Calculate/AllPlanetData/Location/${lon}/${lat}/Time/${time}/${d}/${m}/${y}/${encodedTz}`;
+            // 修正后的 URL，加入了 PlanetName/All
+            const astroUrl = `https://api.vedastro.org/Calculate/AllPlanetData/PlanetName/All/Location/${lon}/${lat}/Time/${time}/${d}/${m}/${y}/${encodedTz}`;
             
-            log(`正在请求占星数据...`);
+            log("正在向星辰服务器申请数据授权...");
             const astroResp = await fetch(astroUrl);
-            
-            // 重要：先拿文本，再转 JSON，防止 Unexpected end of JSON
             const rawText = await astroResp.text();
-            log(`服务器原始响应预览: ${rawText.substring(0, 100)}...`);
             
-            if(!astroResp.ok) throw new Error(`占星服务器返回错误代码: ${astroResp.status}`);
-            
-            let astroJson;
-            try {
-                astroJson = JSON.parse(rawText);
-            } catch(e) {
-                throw new Error(`数据格式非JSON！原始内容是: ${rawText}`);
+            if(!astroResp.ok) {
+                log(`服务器异常内容: ${rawText.substring(0,50)}`, true);
+                throw new Error("占星服务器目前无法响应此坐标请求。");
             }
             
+            const astroJson = JSON.parse(rawText);
             const astroData = astroJson.Payload;
-            log("占星数据获取成功，发送至 AI...");
+            log("天文序列同步成功，正在进行 AI 逻辑降维...");
 
-            // 3. AI
-            const prompt = `你是一位心理洞察大师。数据：${JSON.stringify(astroData).substring(0, 800)}。请解析核心特质、关系模式、家庭印记。严禁占星词汇。`;
+            // 3. AI 深度解析
+            const prompt = `你是一位心理学和生命能量研究专家。
+            请根据以下结构化生命能量数据，为[${document.getElementById('name').value}]撰写一份深度解析报告：
+            ${JSON.stringify(astroData).substring(0, 1000)}
+            
+            要求：
+            1. 严禁出现任何占星、命理术语（宫位、相位、XX星、XX座、上升等）。
+            2. 分为三部分：
+               - 【内在原色】：描述性格最深处的心理动机。
+               - 【外部镜像】：描述在关系中的潜意识倾向。
+               - 【能量溯源】：描述原生环境对生命脚本的潜移默化。
+            3. 语气要优雅、洞察、充满人文关怀。`;
+
             const aiResp = await fetch('https://api.deepseek.com/chat/completions', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${key}`},
                 body: JSON.stringify({
                     model: "deepseek-chat",
-                    messages: [{role: "user", content: prompt}]
+                    messages: [{role: "user", content: prompt}],
+                    temperature: 0.75
                 })
             });
 
-            const aiText = await aiResp.text();
-            if(!aiResp.ok) throw new Error(`AI服务器错误: ${aiText}`);
-            
-            const aiJson = JSON.parse(aiText);
+            if(!aiResp.ok) throw new Error("AI 解读环节超时，请检查 API Key 余额。");
+            const aiJson = await aiResp.json();
             const report = aiJson.choices[0].message.content;
 
-            // 显示
-            document.getElementById('report-body').innerHTML = report.split('\n').map(l => `<p style="line-height:2; margin-bottom:10px;">${l}</p>`).join('');
+            // 4. 渲染结果
+            document.getElementById('out-name').textContent = document.getElementById('name').value;
+            const formatted = report.split('\n').filter(l => l.trim()).map(l => `<p class="module-content">${l}</p>`).join('');
+            document.getElementById('report-body').innerHTML = formatted;
+
+            document.getElementById('loader').style.display = 'none';
             document.getElementById('report-container').style.display = 'block';
             document.getElementById('save-image-btn').style.display = 'block';
-            document.getElementById('input-panel').style.display = 'none';
-            log("全部任务完成！");
+            log("人生蓝图已成功生成。");
 
         } catch (e) {
-            log(`致命错误: ${e.message}`, true);
-            console.error(e);
+            log(`执行失败: ${e.message}`, true);
+            alert("执行出错: " + e.message);
+            document.getElementById('input-panel').style.display = 'block';
+            document.getElementById('loader').style.display = 'none';
         }
     }
 
     function takeScreenshot() {
-        html2canvas(document.getElementById('report-container'), { scale: 2, useCORS: true, backgroundColor: "#f9f6f2" }).then(canvas => {
+        const target = document.getElementById('report-container');
+        html2canvas(target, { scale: 2, useCORS: true, backgroundColor: "#f9f6f2" }).then(canvas => {
             const link = document.createElement('a');
-            link.download = `Report.png`;
+            link.download = `Blueprint_Report.png`;
             link.href = canvas.toDataURL();
             link.click();
         });
