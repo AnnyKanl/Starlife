@@ -760,7 +760,79 @@ ${JSON.stringify(chart, null, 2)}
   },
 };
 
-// ─── City search (OpenStreetMap Nominatim) ───────────────────
+// ─── City search (built-in database, no network needed) ──────
+const CITIES = [
+  // 中国
+  ["北京","Beijing",39.9042,116.4074],["上海","Shanghai",31.2304,121.4737],
+  ["广州","Guangzhou",23.1291,113.2644],["深圳","Shenzhen",22.5431,114.0579],
+  ["成都","Chengdu",30.5728,104.0668],["杭州","Hangzhou",30.2741,120.1551],
+  ["武汉","Wuhan",30.5928,114.3055],["西安","Xi'an",34.3416,108.9398],
+  ["重庆","Chongqing",29.5630,106.5516],["南京","Nanjing",32.0603,118.7969],
+  ["天津","Tianjin",39.3434,117.3616],["苏州","Suzhou",31.2989,120.5853],
+  ["郑州","Zhengzhou",34.7466,113.6253],["长沙","Changsha",28.2278,112.9388],
+  ["青岛","Qingdao",36.0671,120.3826],["沈阳","Shenyang",41.8057,123.4315],
+  ["宁波","Ningbo",29.8683,121.5440],["东莞","Dongguan",23.0207,113.7518],
+  ["昆明","Kunming",25.0453,102.7097],["厦门","Xiamen",24.4798,118.0894],
+  ["福州","Fuzhou",26.0745,119.2965],["哈尔滨","Harbin",45.8038,126.5349],
+  ["济南","Jinan",36.6512,117.1201],["合肥","Hefei",31.8206,117.2272],
+  ["长春","Changchun",43.8171,125.3235],["南昌","Nanchang",28.6820,115.8579],
+  ["石家庄","Shijiazhuang",38.0428,114.5149],["太原","Taiyuan",37.8706,112.5489],
+  ["贵阳","Guiyang",26.6470,106.6302],["乌鲁木齐","Urumqi",43.8256,87.6168],
+  ["南宁","Nanning",22.8170,108.3665],["呼和浩特","Hohhot",40.8427,111.7490],
+  ["兰州","Lanzhou",36.0617,103.8318],["西宁","Xining",36.6171,101.7782],
+  ["银川","Yinchuan",38.4681,106.2730],["拉萨","Lhasa",29.6520,91.1721],
+  ["海口","Haikou",20.0440,110.1990],["三亚","Sanya",18.2524,109.5119],
+  ["大连","Dalian",38.9140,121.6147],["温州","Wenzhou",28.0000,120.6720],
+  ["台北","Taipei",25.0330,121.5654],["香港","Hong Kong",22.3193,114.1694],
+  ["澳门","Macau",22.1987,113.5439],
+  // 印度（重点）
+  ["孟买","Mumbai",19.0760,72.8777],["德里","Delhi",28.7041,77.1025],
+  ["新德里","New Delhi",28.6139,77.2090],["班加罗尔","Bangalore",12.9716,77.5946],
+  ["海得拉巴","Hyderabad",17.3850,78.4867],["金奈","Chennai",13.0827,80.2707],
+  ["加尔各答","Kolkata",22.5726,88.3639],["艾哈迈达巴德","Ahmedabad",23.0225,72.5714],
+  ["浦那","Pune",18.5204,73.8567],["斋浦尔","Jaipur",26.9124,75.7873],
+  ["苏拉特","Surat",21.1702,72.8311],["勒克瑙","Lucknow",26.8467,80.9462],
+  ["坎普尔","Kanpur",26.4499,80.3319],["那格浦尔","Nagpur",21.1458,79.0882],
+  ["维沙卡帕特南","Visakhapatnam",17.6868,83.2185],["博帕尔","Bhopal",23.2599,77.4126],
+  ["帕特纳","Patna",25.5941,85.1376],["瓦拉纳西","Varanasi",25.3176,82.9739],
+  ["果阿","Goa",15.2993,74.1240],["阿格拉","Agra",27.1767,78.0081],
+  ["斋沙默尔","Jaisalmer",26.9157,70.9083],["乌代浦尔","Udaipur",24.5854,73.7125],
+  ["焦特布尔","Jodhpur",26.2389,73.0243],["科钦","Kochi",9.9312,76.2673],
+  ["德拉敦","Dehradun",30.3165,78.0322],["昌迪加尔","Chandigarh",30.7333,76.7794],
+  ["科英巴托尔","Coimbatore",11.0168,76.9558],["马杜赖","Madurai",9.9252,78.1198],
+  // 亚洲其他
+  ["东京","Tokyo",35.6762,139.6503],["大阪","Osaka",34.6937,135.5023],
+  ["首尔","Seoul",37.5665,126.9780],["新加坡","Singapore",1.3521,103.8198],
+  ["曼谷","Bangkok",13.7563,100.5018],["吉隆坡","Kuala Lumpur",3.1390,101.6869],
+  ["雅加达","Jakarta",-6.2088,106.8456],["马尼拉","Manila",14.5995,120.9842],
+  ["河内","Hanoi",21.0285,105.8542],["胡志明市","Ho Chi Minh City",10.8231,106.6297],
+  ["迪拜","Dubai",25.2048,55.2708],["卡拉奇","Karachi",24.8607,67.0011],
+  ["伊斯兰堡","Islamabad",33.6844,73.0479],["拉合尔","Lahore",31.5204,74.3587],
+  ["达卡","Dhaka",23.8103,90.4125],["加德满都","Kathmandu",27.7172,85.3240],
+  ["科伦坡","Colombo",6.9271,79.8612],["仰光","Yangon",16.8661,96.1951],
+  ["德黑兰","Tehran",35.6892,51.3890],["伊斯坦布尔","Istanbul",41.0082,28.9784],
+  // 欧洲
+  ["伦敦","London",51.5074,-0.1278],["巴黎","Paris",48.8566,2.3522],
+  ["柏林","Berlin",52.5200,13.4050],["马德里","Madrid",40.4168,-3.7038],
+  ["罗马","Rome",41.9028,12.4964],["阿姆斯特丹","Amsterdam",52.3676,4.9041],
+  ["维也纳","Vienna",48.2082,16.3738],["苏黎世","Zurich",47.3769,8.5417],
+  ["布鲁塞尔","Brussels",50.8503,4.3517],["斯德哥尔摩","Stockholm",59.3293,18.0686],
+  ["莫斯科","Moscow",55.7558,37.6176],["华沙","Warsaw",52.2297,21.0122],
+  // 美洲
+  ["纽约","New York",40.7128,-74.0060],["洛杉矶","Los Angeles",34.0522,-118.2437],
+  ["芝加哥","Chicago",41.8781,-87.6298],["休斯顿","Houston",29.7604,-95.3698],
+  ["旧金山","San Francisco",37.7749,-122.4194],["西雅图","Seattle",47.6062,-122.3321],
+  ["波士顿","Boston",42.3601,-71.0589],["迈阿密","Miami",25.7617,-80.1918],
+  ["多伦多","Toronto",43.6532,-79.3832],["温哥华","Vancouver",49.2827,-123.1207],
+  ["墨西哥城","Mexico City",19.4326,-99.1332],["圣保罗","Sao Paulo",-23.5505,-46.6333],
+  ["布宜诺斯艾利斯","Buenos Aires",-34.6037,-58.3816],["利马","Lima",-12.0464,-77.0428],
+  // 非洲/大洋洲
+  ["开罗","Cairo",30.0444,31.2357],["拉各斯","Lagos",6.5244,3.3792],
+  ["约翰内斯堡","Johannesburg",-26.2041,28.0473],["内罗毕","Nairobi",-1.2921,36.8219],
+  ["悉尼","Sydney",-33.8688,151.2093],["墨尔本","Melbourne",-37.8136,144.9631],
+  ["奥克兰","Auckland",-36.8485,174.7633],
+];
+
 let cityTimer = null;
 
 function onCityInput(val) {
@@ -768,30 +840,20 @@ function onCityInput(val) {
   document.getElementById('lng').value = '';
   document.getElementById('city-confirmed').style.display = 'none';
   clearTimeout(cityTimer);
-  const q = val.trim();
-  if (q.length < 2) { document.getElementById('city-suggestions').style.display = 'none'; return; }
-  cityTimer = setTimeout(() => fetchCitySuggestions(q), 420);
+  const q = val.trim().toLowerCase();
+  if (q.length < 1) { document.getElementById('city-suggestions').style.display = 'none'; return; }
+  cityTimer = setTimeout(() => searchCities(q), 150);
 }
 
-async function fetchCitySuggestions(query) {
-  try {
-    const url = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(query) + '&format=json&limit=6&addressdetails=1';
-    const resp = await fetch(url, { headers: { 'Accept-Language': 'zh-CN,zh,en' } });
-    const results = await resp.json();
-    renderSuggestions(results);
-  } catch(e) {}
-}
-
-function renderSuggestions(results) {
+function searchCities(q) {
+  const matches = CITIES.filter(c =>
+    c[0].toLowerCase().includes(q) || c[1].toLowerCase().includes(q)
+  ).slice(0, 8);
   const box = document.getElementById('city-suggestions');
-  if (!results.length) { box.style.display = 'none'; return; }
-  box.innerHTML = results.map(r => {
-    const city = r.address && (r.address.city || r.address.town || r.address.village || r.address.county) || r.name;
-    const state = r.address && r.address.state || '';
-    const country = r.address && r.address.country || '';
-    const label = [city, state, country].filter(Boolean).join('，');
-    const lat = parseFloat(r.lat).toFixed(4), lon = parseFloat(r.lon).toFixed(4);
-    return '<div onclick="selectCity(' + r.lat + ',' + r.lon + ','' + label.replace(/'/g,"\\'") + '')" style="padding:10px 14px;cursor:pointer;font-size:0.88rem;border-bottom:1px solid rgba(200,151,58,0.1);line-height:1.5;" onmouseover="this.style.background='rgba(200,151,58,0.08)'" onmouseout="this.style.background=''">' + label + '</div>';
+  if (!matches.length) { box.style.display = 'none'; return; }
+  box.innerHTML = matches.map(c => {
+    const label = c[0] + (c[1] !== c[0] ? ' ' + c[1] : '');
+    return '<div onclick="selectCity(' + c[2] + ',' + c[3] + ',\'' + label + '\')" style="padding:10px 14px;cursor:pointer;font-size:0.88rem;border-bottom:1px solid rgba(200,151,58,0.1);line-height:1.5;" onmouseover="this.style.background=\'rgba(200,151,58,0.08)\'" onmouseout="this.style.background=\'\'">' + label + '</div>';
   }).join('');
   box.style.display = 'block';
 }
@@ -802,7 +864,7 @@ function selectCity(lat, lng, label) {
   document.getElementById('city-input').value = label;
   document.getElementById('city-suggestions').style.display = 'none';
   document.getElementById('city-confirmed').style.display = 'block';
-  document.getElementById('city-confirmed-text').textContent = label + '（' + parseFloat(lat).toFixed(4) + 'N, ' + parseFloat(lng).toFixed(4) + 'E）';
+  document.getElementById('city-confirmed-text').textContent = label + '（' + parseFloat(lat).toFixed(2) + 'N, ' + parseFloat(lng).toFixed(2) + 'E）';
 }
 
 document.addEventListener('click', function(e) {
