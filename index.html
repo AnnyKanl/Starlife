@@ -1,88 +1,31 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人生蓝图 · 深度解析</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Serif+SC:wght@300;400&display=swap" rel="stylesheet">
+    <title>生命蓝图 · 能量解析</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
-        :root {
-            --ink: #1a1a1a;
-            --gold: #b38b4d;
-            --paper: #f9f6f2;
-            --white: #ffffff;
-        }
-
+        :root { --gold: #b38b4d; --ink: #1a1a1a; --paper: #f9f6f2; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background: #e0e0e0;
-            font-family: 'Noto Serif SC', serif;
-            color: var(--ink);
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .main-container {
-            max-width: 500px;
-            width: 100%;
-            background: var(--paper);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            min-height: 100vh;
-            padding: 40px 25px;
-            position: relative;
-        }
-
-        /* 表单样式 */
-        .config-panel {
-            background: var(--white);
-            padding: 20px;
-            border: 1px solid #ddd;
-            margin-bottom: 30px;
-        }
-
-        h1 { font-family: 'Cormorant Garamond'; text-align: center; letter-spacing: 2px; margin-bottom: 30px; color: var(--gold); }
-
+        body { background: #cfcfcf; font-family: 'Noto Serif SC', serif; color: var(--ink); padding: 20px; display: flex; justify-content: center; }
+        .main-container { max-width: 500px; width: 100%; background: var(--paper); box-shadow: 0 10px 50px rgba(0,0,0,0.2); min-height: 100vh; padding: 40px 20px; }
+        .config-panel { background: #fff; padding: 20px; border: 1px solid #eee; margin-bottom: 25px; }
+        h1 { text-align: center; letter-spacing: 5px; margin-bottom: 30px; color: var(--gold); font-size: 22px; }
         .field { margin-bottom: 15px; }
-        label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; text-transform: uppercase; }
-        input { width: 100%; padding: 10px; border: 1px solid #eee; background: var(--paper); outline: none; }
-        input:focus { border-color: var(--gold); }
-
-        .btn-main {
-            width: 100%; padding: 15px; background: var(--ink); color: var(--white);
-            border: none; cursor: pointer; letter-spacing: 2px; transition: 0.3s;
-        }
+        label { display: block; font-size: 11px; color: #999; margin-bottom: 5px; text-transform: uppercase; }
+        input { width: 100%; padding: 12px; border: 1px solid #eee; background: #fafafa; outline: none; transition: 0.3s; font-family: inherit; }
+        input:focus { border-color: var(--gold); background: #fff; }
+        .btn-main { width: 100%; padding: 16px; background: var(--ink); color: #fff; border: none; cursor: pointer; letter-spacing: 2px; font-weight: 600; transition: 0.3s; }
         .btn-main:hover { background: var(--gold); }
-
-        /* 报告样式 */
-        #report-container {
-            display: none;
-            background: var(--paper);
-            padding: 40px 30px;
-            border: 1px solid #eee;
-            position: relative;
-        }
-
-        .report-header { text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 20px; margin-bottom: 30px; }
-        .report-header h2 { font-family: 'Cormorant Garamond'; font-size: 24px; }
-        .report-header p { font-size: 12px; opacity: 0.6; margin-top: 5px; }
-
+        #report-container { display: none; padding: 35px 20px; border: 1px solid #f0f0f0; background: var(--paper); }
+        .report-header { text-align: center; border-bottom: 1px solid var(--gold); padding-bottom: 25px; margin-bottom: 35px; }
         .module-section { margin-bottom: 40px; }
-        .module-title { color: var(--gold); font-weight: 600; margin-bottom: 15px; border-left: 3px solid var(--gold); padding-left: 10px; }
-        .module-content { line-height: 2; font-size: 15px; text-align: justify; color: #333; }
-
-        .report-footer { text-align: center; font-size: 10px; color: #aaa; margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; }
-
-        /* 加载动画 */
-        #loader { display: none; text-align: center; padding: 20px; color: var(--gold); font-style: italic; }
-
-        /* 导出按钮 */
-        #save-image-btn {
-            display: none; width: 100%; padding: 15px; background: var(--gold); color: white;
-            border: none; margin-top: 20px; cursor: pointer; font-weight: bold;
-        }
+        .module-title { color: var(--gold); font-weight: 600; margin-bottom: 12px; font-size: 16px; border-left: 3px solid var(--gold); padding-left: 12px; }
+        .module-content { line-height: 2.1; font-size: 15px; color: #333; text-align: justify; }
+        #loader { display: none; text-align: center; padding: 30px; color: var(--gold); font-size: 14px; letter-spacing: 2px; }
+        #save-image-btn { display: none; width: 100%; padding: 16px; background: var(--gold); color: #fff; border: none; margin-top: 20px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -91,76 +34,71 @@
     <h1>LIFE BLUEPRINT</h1>
 
     <div class="config-panel" id="input-panel">
-        <div class="field"><label>姓名 / Name</label><input type="text" id="name" placeholder="输入称呼"></div>
-        <div class="field"><label>日期 / Date</label><input type="date" id="date"></div>
-        <div class="field"><label>时间 / Time</label><input type="time" id="time"></div>
-        <div class="field"><label>出生城市 / City (英文名更准)</label><input type="text" id="city" placeholder="例如: Shanghai"></div>
+        <div class="field"><label>称呼 / Name</label><input type="text" id="name" placeholder="您的名字"></div>
+        <div class="field"><label>出生日期 / Birth Date</label><input type="date" id="date"></div>
+        <div class="field"><label>准确时间 / Time</label><input type="time" id="time"></div>
+        <div class="field"><label>出生城市 / City (如: Shanghai 或 Sao Paulo)</label><input type="text" id="city" placeholder="拼音或英文全称"></div>
         <div class="field"><label>DeepSeek Key</label><input type="password" id="key" placeholder="sk-..."></div>
-        <button class="btn-main" onclick="run()">生成我的《人生蓝图》</button>
+        <button class="btn-main" onclick="run()">同步生命能量数据</button>
     </div>
 
-    <div id="loader">正在调取宇宙能量数据，请稍候...</div>
+    <div id="loader">「 正在校准星辰坐标，解析深层能量 」</div>
 
     <div id="report-container">
         <div class="report-header">
-            <h2 id="out-name">报告生成中</h2>
-            <p id="out-meta">生命蓝图深度解析报告</p>
+            <h2 id="out-name" style="font-size: 24px; margin-bottom: 10px;"></h2>
+            <p style="font-size: 11px; color: #999; letter-spacing: 2px;">生命蓝图·深度能量解析报告</p>
         </div>
-
-        <div class="module-section">
-            <div class="module-title">能量底色：深层特质</div>
-            <div class="module-content" id="content-ego">...</div>
-        </div>
-
-        <div class="module-section">
-            <div class="module-title">生命镜像：亲密关系</div>
-            <div class="module-content" id="content-love">...</div>
-        </div>
-
-        <div class="module-section">
-            <div class="module-title">印记源头：原生能量</div>
-            <div class="module-content" id="content-karma">...</div>
-        </div>
-
-        <div class="report-footer">
-            人生如逆旅，我亦是行人。<br>本报告基于深层能量逻辑推演，仅供参考。
+        <div id="report-body"></div>
+        <div style="text-align: center; font-size: 10px; color: #ccc; margin-top: 60px; letter-spacing: 1px;">
+            每一颗星辰，都是通往内心的路径
         </div>
     </div>
 
-    <button id="save-image-btn" onclick="takeScreenshot()">保存为精美长图 (可分享)</button>
+    <button id="save-image-btn" onclick="takeScreenshot()">保存为精美长图 (分享)</button>
 </div>
 
 <script>
-    // --- 1. 获取经纬度 ---
+    // 1. 获取坐标和自动计算时区
     async function getCoords(city) {
         const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`);
         const d = await r.json();
-        if(!d.length) throw new Error("无法识别城市，请尝试输入英文名。");
-        return { lat: d[0].lat, lon: d[0].lon, name: d[0].display_name };
+        if(!d.length) throw new Error("无法定位该城市，请检查拼写（建议用英文）。");
+        const lon = parseFloat(d[0].lon);
+        const lat = parseFloat(d[0].lat);
+        // 根据经度估算时区
+        const offset = Math.round(lon / 15);
+        const sign = offset >= 0 ? "+" : "-";
+        const offsetStr = `${sign}${Math.abs(offset).toString().padStart(2, '0')}:00`;
+        return { lat, lon, tz: offsetStr };
     }
 
-    // --- 2. 获取印占天文数据 ---
-    async function getAstroData(date, time, lat, lon) {
+    // 2. 获取印占数据 (修复了 URL 编码问题)
+    async function getAstroData(date, time, lat, lon, tz) {
         const [y, m, d] = date.split('-');
-        const url = `https://api.vedastro.org/Calculate/AllPlanetData/Location/${lon}/${lat}/Time/${time}/${d}/${m}/${y}/+08:00`;
+        // 关键：对时区进行编码，将 + 变成 %2B
+        const encodedTz = encodeURIComponent(tz);
+        const url = `https://api.vedastro.org/Calculate/AllPlanetData/Location/${lon}/${lat}/Time/${time}/${d}/${m}/${y}/${encodedTz}`;
+        
         const r = await fetch(url);
-        const j = await r.json();
-        return j.Payload;
+        if(!r.ok) throw new Error("星辰服务器繁忙，请稍后再试。");
+        const json = await r.json();
+        return json.Payload;
     }
 
-    // --- 3. 调用 AI 解读 (去占星化提示词) ---
+    // 3. AI 深度解析
     async function getAI(key, name, data) {
-        const prompt = `你是一位顶级的心理学导师和生命教练。我会给你一组结构化的生命能量原始数据。
-        数据如下：${JSON.stringify(data).substring(0, 1500)}
+        const prompt = `你是一位顶级的心理洞察大师。我会给你一组生命能量坐标数据。
+        数据：${JSON.stringify(data).substring(0, 1200)}
         
-        请为[${name}]撰写一份深度报告。
-        **必须遵守的规则：**
-        1. 严禁提到任何占星术汇（如：行星、星座、宫位、上升、相位、印度、排盘、大运）。
-        2. 请把这些数据翻译成：深层性格、人际关系模式、潜意识里的家庭影响。
-        3. 语气要优雅、神秘但科学、充满洞察力。
-        4. 报告分为三部分：[核心特质]、[亲密关系]、[原生家庭印记]。
-        
-        请直接输出内容，不要任何开场白。`;
+        请为[${name}]撰写一份深度解析报告。
+        **严格要求：**
+        1. 绝对禁止出现任何占星、术数词汇（如：行星、星座、宫位、上升、相位、大运等）。
+        2. 将其转化为三部分：
+           - 【内在性格底色】：描述其性格最核心的原动力。
+           - 【镜像关系模式】：描述其在亲密关系中的行为逻辑。
+           - 【生命早期的印记】：描述原生家庭对其深远的影响。
+        3. 语气要优雅、从容、直击人心，像是一位智者在娓娓道来。`;
 
         const r = await fetch('https://api.deepseek.com/chat/completions', {
             method: 'POST',
@@ -168,64 +106,57 @@
             body: JSON.stringify({
                 model: "deepseek-chat",
                 messages: [{role: "user", content: prompt}],
-                temperature: 0.7
+                temperature: 0.8
             })
         });
         const d = await r.json();
+        if(d.error) throw new Error(d.error.message);
         return d.choices[0].message.content;
     }
 
-    // --- 主函数 ---
     async function run() {
-        const key = document.getElementById('key').value;
-        const city = document.getElementById('city').value;
-        if(!key || !city) return alert("请填写完整信息。");
+        const key = document.getElementById('key').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+
+        if(!key || !city || !date || !time) return alert("信息尚未填全哦。");
 
         document.getElementById('input-panel').style.display = 'none';
         document.getElementById('loader').style.display = 'block';
 
         try {
             const coords = await getCoords(city);
-            const astro = await getAstroData(
-                document.getElementById('date').value,
-                document.getElementById('time').value,
-                coords.lat, coords.lon
-            );
+            const astro = await getAstroData(date, time, coords.lat, coords.lon, coords.tz);
             const report = await getAI(key, document.getElementById('name').value, astro);
 
-            // 解析报告内容
-            document.getElementById('out-name').textContent = document.getElementById('name').value + " 的人生蓝图";
-            const parts = report.split('\n\n');
-            document.getElementById('content-ego').textContent = parts[0] || "加载中...";
-            document.getElementById('content-love').textContent = parts[1] || "加载中...";
-            document.getElementById('content-karma').textContent = parts[2] || "加载中...";
+            document.getElementById('out-name').textContent = document.getElementById('name').value;
+            
+            // 简单处理 AI 返回的段落格式
+            const formatted = report.split('\n').filter(l => l.trim()).map(l => `<p class="module-content">${l}</p>`).join('<br>');
+            document.getElementById('report-body').innerHTML = formatted;
 
             document.getElementById('loader').style.display = 'none';
             document.getElementById('report-container').style.display = 'block';
             document.getElementById('save-image-btn').style.display = 'block';
 
         } catch (e) {
-            alert("错误: " + e.message);
+            console.error(e);
+            alert("执行出错: " + e.message);
             document.getElementById('input-panel').style.display = 'block';
             document.getElementById('loader').style.display = 'none';
         }
     }
 
-    // --- 截图功能 ---
     function takeScreenshot() {
         const target = document.getElementById('report-container');
-        html2canvas(target, {
-            scale: 2, // 高清
-            useCORS: true,
-            backgroundColor: "#f9f6f2"
-        }).then(canvas => {
+        html2canvas(target, { scale: 2, useCORS: true, backgroundColor: "#f9f6f2" }).then(canvas => {
             const link = document.createElement('a');
-            link.download = `Blueprint-${new Date().getTime()}.png`;
+            link.download = `Life_Blueprint.png`;
             link.href = canvas.toDataURL();
             link.click();
         });
     }
 </script>
-
 </body>
 </html>
