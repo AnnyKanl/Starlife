@@ -1,1179 +1,231 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jyotish · 命盘解读</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+SC:wght@300;400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --ink: #1a1209;
-    --gold: #c8973a;
-    --gold-light: #e8c97a;
-    --cream: #f7f1e8;
-    --cream-dark: #ede4d4;
-    --rust: #8b3a2a;
-    --sage: #4a5e4a;
-    --paper: #fdf8f0;
-    --shadow: rgba(26,18,9,0.12);
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人生蓝图 · 深度解析</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Serif+SC:wght@300;400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --ink: #1a1a1a;
+            --gold: #b38b4d;
+            --paper: #f9f6f2;
+            --white: #ffffff;
+        }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Noto Serif SC', serif;
-    font-weight: 300;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-  }
+        body {
+            background: #e0e0e0;
+            font-family: 'Noto Serif SC', serif;
+            color: var(--ink);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-  /* Decorative background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(200,151,58,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 60% at 80% 80%, rgba(139,58,42,0.06) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
+        .main-container {
+            max-width: 500px;
+            width: 100%;
+            background: var(--paper);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-height: 100vh;
+            padding: 40px 25px;
+            position: relative;
+        }
 
-  .container {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-    position: relative;
-    z-index: 1;
-  }
+        /* 表单样式 */
+        .config-panel {
+            background: var(--white);
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-bottom: 30px;
+        }
 
-  /* Header */
-  .header {
-    text-align: center;
-    padding: 48px 0 32px;
-    border-bottom: 1px solid rgba(200,151,58,0.3);
-    margin-bottom: 36px;
-  }
+        h1 { font-family: 'Cormorant Garamond'; text-align: center; letter-spacing: 2px; margin-bottom: 30px; color: var(--gold); }
 
-  .mandala {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 16px;
-    animation: slowspin 40s linear infinite;
-  }
+        .field { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; text-transform: uppercase; }
+        input { width: 100%; padding: 10px; border: 1px solid #eee; background: var(--paper); outline: none; }
+        input:focus { border-color: var(--gold); }
 
-  @keyframes slowspin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+        .btn-main {
+            width: 100%; padding: 15px; background: var(--ink); color: var(--white);
+            border: none; cursor: pointer; letter-spacing: 2px; transition: 0.3s;
+        }
+        .btn-main:hover { background: var(--gold); }
 
-  .header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    font-weight: 300;
-    letter-spacing: 0.12em;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
+        /* 报告样式 */
+        #report-container {
+            display: none;
+            background: var(--paper);
+            padding: 40px 30px;
+            border: 1px solid #eee;
+            position: relative;
+        }
 
-  .header p {
-    font-size: 0.78rem;
-    letter-spacing: 0.22em;
-    color: var(--ink);
-    opacity: 0.5;
-    text-transform: uppercase;
-  }
+        .report-header { text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 20px; margin-bottom: 30px; }
+        .report-header h2 { font-family: 'Cormorant Garamond'; font-size: 24px; }
+        .report-header p { font-size: 12px; opacity: 0.6; margin-top: 5px; }
 
-  /* Form */
-  .form-section {
-    background: white;
-    border: 1px solid rgba(200,151,58,0.2);
-    border-radius: 2px;
-    padding: 28px 24px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 20px var(--shadow);
-  }
+        .module-section { margin-bottom: 40px; }
+        .module-title { color: var(--gold); font-weight: 600; margin-bottom: 15px; border-left: 3px solid var(--gold); padding-left: 10px; }
+        .module-content { line-height: 2; font-size: 15px; text-align: justify; color: #333; }
 
-  .form-section h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: var(--gold);
-    letter-spacing: 0.08em;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+        .report-footer { text-align: center; font-size: 10px; color: #aaa; margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; }
 
-  .form-section h2::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, rgba(200,151,58,0.4), transparent);
-  }
+        /* 加载动画 */
+        #loader { display: none; text-align: center; padding: 20px; color: var(--gold); font-style: italic; }
 
-  .field {
-    margin-bottom: 18px;
-  }
-
-  label {
-    display: block;
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink);
-    opacity: 0.6;
-    margin-bottom: 6px;
-  }
-
-  input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
-    width: 100%;
-    background: var(--paper);
-    border: 1px solid rgba(26,18,9,0.15);
-    border-radius: 2px;
-    padding: 10px 14px;
-    font-family: 'Noto Serif SC', serif;
-    font-size: 0.95rem;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s;
-    -webkit-appearance: none;
-  }
-
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--gold);
-    background: white;
-  }
-
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-  /* API Key section */
-  .key-section {
-    background: rgba(200,151,58,0.06);
-    border: 1px dashed rgba(200,151,58,0.4);
-    border-radius: 2px;
-    padding: 16px 20px;
-    margin-bottom: 20px;
-    font-size: 0.82rem;
-    line-height: 1.7;
-    color: var(--ink);
-    opacity: 0.85;
-  }
-
-  .key-section strong { color: var(--gold); font-weight: 400; }
-
-  /* Modules */
-  .modules-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 4px;
-  }
-
-  .module-card {
-    border: 1px solid rgba(200,151,58,0.25);
-    border-radius: 2px;
-    padding: 14px 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: var(--paper);
-    position: relative;
-    user-select: none;
-  }
-
-  .module-card input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  .module-card.checked {
-    background: white;
-    border-color: var(--gold);
-    box-shadow: inset 0 0 0 1px var(--gold);
-  }
-
-  .module-card .icon {
-    font-size: 1.4rem;
-    margin-bottom: 6px;
-    display: block;
-  }
-
-  .module-card .name {
-    font-size: 0.82rem;
-    font-weight: 400;
-    color: var(--ink);
-    margin-bottom: 3px;
-  }
-
-  .module-card .desc {
-    font-size: 0.68rem;
-    color: var(--ink);
-    opacity: 0.5;
-    line-height: 1.5;
-  }
-
-  .checkmark {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .module-card.checked .checkmark { opacity: 1; }
-
-  .checkmark::after {
-    content: '';
-    width: 5px;
-    height: 9px;
-    border-right: 1.5px solid white;
-    border-bottom: 1.5px solid white;
-    transform: rotate(45deg) translateY(-1px);
-  }
-
-  /* Submit */
-  .btn-generate {
-    width: 100%;
-    padding: 16px;
-    background: var(--ink);
-    color: var(--gold-light);
-    border: none;
-    border-radius: 2px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.18em;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 10px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-generate:hover { background: #2a1f0f; }
-  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  /* Progress */
-  .progress-wrap {
-    display: none;
-    margin: 24px 0;
-    text-align: center;
-  }
-
-  .progress-wrap.show { display: block; }
-
-  .progress-ring {
-    width: 48px;
-    height: 48px;
-    margin: 0 auto 14px;
-    animation: slowspin 3s linear infinite;
-  }
-
-  .progress-text {
-    font-size: 0.82rem;
-    letter-spacing: 0.12em;
-    color: var(--gold);
-    opacity: 0.8;
-  }
-
-  /* Report */
-  .report {
-    display: none;
-    margin-top: 28px;
-  }
-
-  .report.show { display: block; }
-
-  .report-header {
-    text-align: center;
-    padding: 28px 24px;
-    background: var(--ink);
-    color: var(--cream);
-    margin-bottom: 1px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .report-header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(200,151,58,0.2) 0%, transparent 70%);
-  }
-
-  .report-header h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 300;
-    letter-spacing: 0.1em;
-    color: var(--gold-light);
-    margin-bottom: 4px;
-    position: relative;
-  }
-
-  .report-header .birth-info {
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    opacity: 0.5;
-    position: relative;
-  }
-
-  .chart-summary {
-    background: white;
-    border: 1px solid rgba(200,151,58,0.15);
-    padding: 20px 24px;
-    margin-bottom: 1px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    text-align: center;
-  }
-
-  .chart-item .value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.15rem;
-    color: var(--gold);
-    margin-bottom: 4px;
-  }
-
-  .chart-item .key {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    opacity: 0.45;
-  }
-
-  .module-report {
-    background: white;
-    border: 1px solid rgba(200,151,58,0.15);
-    margin-bottom: 2px;
-    overflow: hidden;
-  }
-
-  .module-report-header {
-    padding: 16px 24px;
-    background: linear-gradient(to right, rgba(200,151,58,0.08), transparent);
-    border-bottom: 1px solid rgba(200,151,58,0.15);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .module-report-header .icon { font-size: 1.2rem; }
-
-  .module-report-header h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem;
-    font-weight: 400;
-    color: var(--gold);
-    letter-spacing: 0.06em;
-  }
-
-  .module-report-body {
-    padding: 20px 24px;
-    font-size: 0.9rem;
-    line-height: 2;
-    color: var(--ink);
-    opacity: 0.85;
-    white-space: pre-wrap;
-  }
-
-  .module-report-body.loading {
-    color: var(--gold);
-    opacity: 0.5;
-    font-style: italic;
-    animation: pulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 0.35; }
-    50% { opacity: 0.65; }
-  }
-
-  /* Error */
-  .error-box {
-    background: rgba(139,58,42,0.08);
-    border: 1px solid rgba(139,58,42,0.3);
-    border-radius: 2px;
-    padding: 14px 18px;
-    font-size: 0.82rem;
-    color: var(--rust);
-    margin: 16px 0;
-    display: none;
-    line-height: 1.7;
-  }
-  .error-box.show { display: block; }
-
-  /* Divider */
-  .divider {
-    text-align: center;
-    margin: 10px 0;
-    font-size: 1.1rem;
-    opacity: 0.2;
-    letter-spacing: 0.3em;
-  }
-
-  /* Save hint */
-  .save-hint {
-    text-align: center;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    opacity: 0.4;
-    margin-top: 14px;
-    text-transform: uppercase;
-  }
-
-  @media (max-width: 400px) {
-    .modules-grid { grid-template-columns: 1fr 1fr; }
-    .row2 { grid-template-columns: 1fr; }
-    .chart-summary { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  }
-</style>
+        /* 导出按钮 */
+        #save-image-btn {
+            display: none; width: 100%; padding: 15px; background: var(--gold); color: white;
+            border: none; margin-top: 20px; cursor: pointer; font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
 
-  <!-- Header -->
-  <div class="header">
-    <svg class="mandala" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="32" cy="32" r="30" stroke="#c8973a" stroke-width="0.5" opacity="0.4"/>
-      <circle cx="32" cy="32" r="22" stroke="#c8973a" stroke-width="0.5" opacity="0.5"/>
-      <circle cx="32" cy="32" r="4" fill="#c8973a" opacity="0.6"/>
-      <g opacity="0.5" stroke="#c8973a" stroke-width="0.5">
-        <line x1="32" y1="2" x2="32" y2="10"/>
-        <line x1="32" y1="54" x2="32" y2="62"/>
-        <line x1="2" y1="32" x2="10" y2="32"/>
-        <line x1="54" y1="32" x2="62" y2="32"/>
-        <line x1="11" y1="11" x2="17" y2="17"/>
-        <line x1="47" y1="47" x2="53" y2="53"/>
-        <line x1="53" y1="11" x2="47" y2="17"/>
-        <line x1="17" y1="47" x2="11" y2="53"/>
-      </g>
-      <g opacity="0.35" stroke="#c8973a" stroke-width="0.4">
-        <line x1="32" y1="10" x2="32" y2="22"/>
-        <line x1="32" y1="42" x2="32" y2="54"/>
-        <line x1="10" y1="32" x2="22" y2="32"/>
-        <line x1="42" y1="32" x2="54" y2="32"/>
-        <line x1="17" y1="17" x2="24.5" y2="24.5"/>
-        <line x1="39.5" y1="39.5" x2="47" y2="47"/>
-        <line x1="47" y1="17" x2="39.5" y2="24.5"/>
-        <line x1="24.5" y1="39.5" x2="17" y2="47"/>
-      </g>
-      <polygon points="32,14 36,28 32,24 28,28" fill="#c8973a" opacity="0.3"/>
-      <polygon points="32,50 36,36 32,40 28,36" fill="#c8973a" opacity="0.3"/>
-    </svg>
-    <h1>Jyotish · 命盘解读</h1>
-    <p>Vedic Astrology · 印度占星</p>
-  </div>
+<div class="main-container">
+    <h1>LIFE BLUEPRINT</h1>
 
-  <!-- API Key 说明 -->
-  <div class="key-section">
-    <strong>使用前准备：</strong>需要填入 DeepSeek API Key（在 <a href="https://platform.deepseek.com" target="_blank" style="color:var(--gold)">platform.deepseek.com</a> 注册获取，价格极低）。Key 仅在你的浏览器本地使用，不会上传任何服务器。
-  </div>
-
-  <!-- Form -->
-  <div class="form-section">
-    <h2>出生信息</h2>
-
-    <div class="field">
-      <label>姓名或称呼</label>
-      <input type="text" id="name" placeholder="如：小月" />
+    <div class="config-panel" id="input-panel">
+        <div class="field"><label>姓名 / Name</label><input type="text" id="name" placeholder="输入称呼"></div>
+        <div class="field"><label>日期 / Date</label><input type="date" id="date"></div>
+        <div class="field"><label>时间 / Time</label><input type="time" id="time"></div>
+        <div class="field"><label>出生城市 / City (英文名更准)</label><input type="text" id="city" placeholder="例如: Shanghai"></div>
+        <div class="field"><label>DeepSeek Key</label><input type="password" id="key" placeholder="sk-..."></div>
+        <button class="btn-main" onclick="run()">生成我的《人生蓝图》</button>
     </div>
 
-    <div class="row2">
-      <div class="field">
-        <label>出生日期</label>
-        <input type="date" id="birthdate" />
-      </div>
-      <div class="field">
-        <label>出生时间</label>
-        <input type="time" id="birthtime" />
-      </div>
+    <div id="loader">正在调取宇宙能量数据，请稍候...</div>
+
+    <div id="report-container">
+        <div class="report-header">
+            <h2 id="out-name">报告生成中</h2>
+            <p id="out-meta">生命蓝图深度解析报告</p>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">能量底色：深层特质</div>
+            <div class="module-content" id="content-ego">...</div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">生命镜像：亲密关系</div>
+            <div class="module-content" id="content-love">...</div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">印记源头：原生能量</div>
+            <div class="module-content" id="content-karma">...</div>
+        </div>
+
+        <div class="report-footer">
+            人生如逆旅，我亦是行人。<br>本报告基于深层能量逻辑推演，仅供参考。
+        </div>
     </div>
 
-    <div class="field" style="position:relative">
-      <label>出生城市</label>
-      <input type="text" id="city-input" placeholder="输入城市名，如：上海、Mumbai、New York…" autocomplete="off" oninput="onCityInput(this.value)" />
-      <div id="city-suggestions" style="display:none; position:absolute; left:0; right:0; top:100%; z-index:99; background:white; border:1px solid rgba(200,151,58,0.35); border-top:none; border-radius:0 0 2px 2px; box-shadow:0 4px 16px rgba(26,18,9,0.1); max-height:200px; overflow-y:auto;"></div>
-      <div id="city-confirmed" style="display:none; margin-top:6px; font-size:0.75rem; color:var(--sage); letter-spacing:0.04em;">
-        ✓ <span id="city-confirmed-text"></span>
-      </div>
-    </div>
-    <input type="hidden" id="lat" />
-    <input type="hidden" id="lng" />
-
-    <div class="field">
-      <label>DeepSeek API Key</label>
-      <input type="text" id="apikey" placeholder="sk-..." />
-    </div>
-  </div>
-
-  <!-- Modules -->
-  <div class="form-section">
-    <h2>选择解读模块</h2>
-    <div class="modules-grid" id="modules-grid">
-
-      <label class="module-card checked" onclick="toggleModule(this)">
-        <input type="checkbox" checked data-id="soulmate">
-        <span class="checkmark"></span>
-        <span class="icon">💞</span>
-        <div class="name">正缘长什么样</div>
-        <div class="desc">第七宫 · 金星 · Navamsa</div>
-      </label>
-
-      <label class="module-card checked" onclick="toggleModule(this)">
-        <input type="checkbox" checked data-id="karma">
-        <span class="checkmark"></span>
-        <span class="icon">🌿</span>
-        <div class="name">来自父母的业力</div>
-        <div class="desc">第四宫 · 第九宫 · 月亮</div>
-      </label>
-
-      <label class="module-card checked" onclick="toggleModule(this)">
-        <input type="checkbox" checked data-id="wealth">
-        <span class="checkmark"></span>
-        <span class="icon">🪙</span>
-        <div class="name">今生财运密码</div>
-        <div class="desc">第二宫 · 第十一宫 · 木星</div>
-      </label>
-
-      <label class="module-card" onclick="toggleModule(this)">
-        <input type="checkbox" data-id="career">
-        <span class="checkmark"></span>
-        <span class="icon">🏛️</span>
-        <div class="name">事业天赋方向</div>
-        <div class="desc">第十宫 · Atmakaraka</div>
-      </label>
-
-      <label class="module-card" onclick="toggleModule(this)">
-        <input type="checkbox" data-id="health">
-        <span class="checkmark"></span>
-        <span class="icon">🌙</span>
-        <div class="name">身心健康提示</div>
-        <div class="desc">第六宫 · 土星 · 火星</div>
-      </label>
-
-      <label class="module-card" onclick="toggleModule(this)">
-        <input type="checkbox" data-id="dasha">
-        <span class="checkmark"></span>
-        <span class="icon">⏳</span>
-        <div class="name">当前大运解读</div>
-        <div class="desc">Vimshottari Dasha</div>
-      </label>
-
-    </div>
-  </div>
-
-  <div class="error-box" id="error-box"></div>
-
-  <button class="btn-generate" id="btn-generate" onclick="generate()">
-    ✦ 开始解读命盘 ✦
-  </button>
-
-  <!-- Progress -->
-  <div class="progress-wrap" id="progress">
-    <svg class="progress-ring" viewBox="0 0 48 48">
-      <circle cx="24" cy="24" r="20" stroke="#c8973a" stroke-width="1" fill="none" opacity="0.2"/>
-      <circle cx="24" cy="24" r="4" fill="#c8973a" opacity="0.6"/>
-      <g stroke="#c8973a" stroke-width="0.8" opacity="0.5">
-        <line x1="24" y1="4" x2="24" y2="10"/>
-        <line x1="24" y1="38" x2="24" y2="44"/>
-        <line x1="4" y1="24" x2="10" y2="24"/>
-        <line x1="38" y1="24" x2="44" y2="24"/>
-      </g>
-    </svg>
-    <div class="progress-text" id="progress-text">正在计算星盘位置…</div>
-  </div>
-
-  <!-- Report -->
-  <div class="report" id="report">
-    <div class="report-header">
-      <h2 id="report-name">命盘解读报告</h2>
-      <div class="birth-info" id="report-birth-info"></div>
-    </div>
-
-    <div class="chart-summary" id="chart-summary"></div>
-
-    <div class="divider">✦ ✦ ✦</div>
-
-    <div id="report-modules"></div>
-
-    <div class="save-hint">长按截图 · 分享给朋友</div>
-  </div>
-
+    <button id="save-image-btn" onclick="takeScreenshot()">保存为精美长图 (可分享)</button>
 </div>
 
 <script>
-// ─── Module configs ──────────────────────────────────────────
-const MODULE_CONFIG = {
-  soulmate: {
-    name: '正缘长什么样',
-    icon: '💞',
-    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人今生的正缘（灵魂伴侣）的特征。
-
-命盘数据：
-${JSON.stringify(chart, null, 2)}
-
-请重点分析：
-1. 第七宫（婚姻宫）的星座和其中的行星
-2. 第七宫宫主所在位置和状态
-3. 金星的位置、星座和状态（代表感情观和吸引力）
-4. Navamsa（第九分盘）中第七宫的情况（如有数据）
-
-解读要求：
-- 用温暖、诗意的语言描述正缘的外貌特征、性格气质、职业倾向
-- 描述两人相遇的可能方式或场景
-- 指出此人在感情中的模式和需要注意的地方
-- 语气如老朋友般亲切，不要太学术
-- 300-400字，分2-3段，不要用标题，自然流淌
-
-请直接开始解读，不要说"根据命盘"之类的开场白。`,
-  },
-  karma: {
-    name: '来自父母的业力',
-    icon: '🌿',
-    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人来自父母的业力与家庭印记。
-
-命盘数据：
-${JSON.stringify(chart, null, 2)}
-
-请重点分析：
-1. 第四宫（母亲宫、家庭宫）的星座和行星
-2. 第九宫（父亲宫、前世宫）的星座和行星
-3. 月亮的位置（代表母亲、内心、情感底色）
-4. 土星与这些宫位的关系（业力指示）
-
-解读要求：
-- 描述此人从母亲那里继承的情感模式和潜意识底色
-- 描述从父亲那里带来的人生观念或挑战
-- 点出此人今生要"疗愈"或"完成"的家族业力功课
-- 语气温柔而深刻，带有慈悲感，不要评判
-- 300-400字，分2-3段，不要用标题
-
-请直接开始解读，不要说"根据命盘"之类的开场白。`,
-  },
-  wealth: {
-    name: '今生财运密码',
-    icon: '🪙',
-    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人今生的财富模式和赚钱密码。
-
-命盘数据：
-${JSON.stringify(chart, null, 2)}
-
-请重点分析：
-1. 第二宫（财富宫）的星座和行星
-2. 第十一宫（收益宫）的星座和行星
-3. 木星的位置（代表财富、扩张和幸运）
-4. 财富宫宫主和收益宫宫主的状态
-
-解读要求：
-- 描述此人天生的财富体质和与金钱的关系模式
-- 指出最适合他/她赚钱的方式或领域（不要太具体到职业，而是方式和能量）
-- 描述财运的起伏规律或特别顺畅的时机类型
-- 给出1-2个实用的"与财富对齐"的建议
-- 语气充满希望和力量感，不要说负面的话
-- 300-400字，分2-3段，不要用标题
-
-请直接开始解读，不要说"根据命盘"之类的开场白。`,
-  },
-  career: {
-    name: '事业天赋方向',
-    icon: '🏛️',
-    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人今生的事业天赋和使命方向。
-
-命盘数据：
-${JSON.stringify(chart, null, 2)}
-
-请重点分析：
-1. 第十宫（事业宫）的星座和行星
-2. 第十宫宫主的位置和状态
-3. 太阳的位置（代表身份认同、领导力和使命感）
-4. 上升星座和Atmakaraka（灵魂星，度数最高的行星）
-
-解读要求：
-- 描述此人天生擅长的领域和独特才华
-- 描述让他/她感到有意义、有灵魂的工作方向
-- 指出事业上可能面临的考验或转折点类型
-- 语气鼓励而真实，像一位见过很多人生的智者
-- 300-400字，分2-3段，不要用标题
-
-请直接开始解读。`,
-  },
-  health: {
-    name: '身心健康提示',
-    icon: '🌙',
-    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人的身心健康模式和需要关注的领域。
-
-命盘数据：
-${JSON.stringify(chart, null, 2)}
-
-请重点分析：
-1. 第六宫（健康宫、疾病宫）的星座和行星
-2. 上升星座及其宫主（代表整体体质）
-3. 月亮的位置（代表心理健康和情绪体）
-4. 土星和火星对健康宫位的影响
-
-解读要求：
-- 描述此人的天生体质类型和能量模式
-- 指出最需要滋养和保护的身体或心理方面
-- 给出2-3个与生命力对齐的生活建议（饮食、休息、情绪疗愈方向等）
-- 语气像一位关心你的中医大夫+心理咨询师
-- 不要说吓人的话，聚焦在如何滋养而非恐惧
-- 300-400字，分2-3段，不要用标题
-
-请直接开始解读。`,
-  },
-  dasha: {
-    name: '当前大运解读',
-    icon: '⏳',
-    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人当前所处的Vimshottari大运（Dasha）周期的主题和能量。
-
-命盘数据：
-${JSON.stringify(chart, null, 2)}
-
-请重点分析：
-1. 当前主大运（Mahadasha）是哪颗行星主管，这颗行星在命盘中的位置和状态
-2. 这个大运周期的整体主题和生命课题
-3. 当前小运（Antardasha）如果有数据的话
-
-解读要求：
-- 描述这个大运周期带来的整体能量和人生主旋律
-- 指出这段时间最容易开花结果的领域
-- 指出需要耐心度过的考验或功课
-- 给出与当前大运能量共舞的建议
-- 语气像一位看着你成长的灵性导师
-- 300-400字，分2-3段，不要用标题
-
-请直接开始解读。`,
-  },
-};
-
-// ─── City search (built-in database, no network needed) ──────
-const CITIES = [
-  // 中国
-  ["北京","Beijing",39.9042,116.4074],["上海","Shanghai",31.2304,121.4737],
-  ["广州","Guangzhou",23.1291,113.2644],["深圳","Shenzhen",22.5431,114.0579],
-  ["成都","Chengdu",30.5728,104.0668],["杭州","Hangzhou",30.2741,120.1551],
-  ["武汉","Wuhan",30.5928,114.3055],["西安","Xi'an",34.3416,108.9398],
-  ["重庆","Chongqing",29.5630,106.5516],["南京","Nanjing",32.0603,118.7969],
-  ["天津","Tianjin",39.3434,117.3616],["苏州","Suzhou",31.2989,120.5853],
-  ["郑州","Zhengzhou",34.7466,113.6253],["长沙","Changsha",28.2278,112.9388],
-  ["青岛","Qingdao",36.0671,120.3826],["沈阳","Shenyang",41.8057,123.4315],
-  ["宁波","Ningbo",29.8683,121.5440],["东莞","Dongguan",23.0207,113.7518],
-  ["昆明","Kunming",25.0453,102.7097],["厦门","Xiamen",24.4798,118.0894],
-  ["福州","Fuzhou",26.0745,119.2965],["哈尔滨","Harbin",45.8038,126.5349],
-  ["济南","Jinan",36.6512,117.1201],["合肥","Hefei",31.8206,117.2272],
-  ["长春","Changchun",43.8171,125.3235],["南昌","Nanchang",28.6820,115.8579],
-  ["石家庄","Shijiazhuang",38.0428,114.5149],["太原","Taiyuan",37.8706,112.5489],
-  ["贵阳","Guiyang",26.6470,106.6302],["乌鲁木齐","Urumqi",43.8256,87.6168],
-  ["南宁","Nanning",22.8170,108.3665],["呼和浩特","Hohhot",40.8427,111.7490],
-  ["兰州","Lanzhou",36.0617,103.8318],["西宁","Xining",36.6171,101.7782],
-  ["银川","Yinchuan",38.4681,106.2730],["拉萨","Lhasa",29.6520,91.1721],
-  ["海口","Haikou",20.0440,110.1990],["三亚","Sanya",18.2524,109.5119],
-  ["大连","Dalian",38.9140,121.6147],["温州","Wenzhou",28.0000,120.6720],
-  ["台北","Taipei",25.0330,121.5654],["香港","Hong Kong",22.3193,114.1694],
-  ["澳门","Macau",22.1987,113.5439],
-  // 印度（重点）
-  ["孟买","Mumbai",19.0760,72.8777],["德里","Delhi",28.7041,77.1025],
-  ["新德里","New Delhi",28.6139,77.2090],["班加罗尔","Bangalore",12.9716,77.5946],
-  ["海得拉巴","Hyderabad",17.3850,78.4867],["金奈","Chennai",13.0827,80.2707],
-  ["加尔各答","Kolkata",22.5726,88.3639],["艾哈迈达巴德","Ahmedabad",23.0225,72.5714],
-  ["浦那","Pune",18.5204,73.8567],["斋浦尔","Jaipur",26.9124,75.7873],
-  ["苏拉特","Surat",21.1702,72.8311],["勒克瑙","Lucknow",26.8467,80.9462],
-  ["坎普尔","Kanpur",26.4499,80.3319],["那格浦尔","Nagpur",21.1458,79.0882],
-  ["维沙卡帕特南","Visakhapatnam",17.6868,83.2185],["博帕尔","Bhopal",23.2599,77.4126],
-  ["帕特纳","Patna",25.5941,85.1376],["瓦拉纳西","Varanasi",25.3176,82.9739],
-  ["果阿","Goa",15.2993,74.1240],["阿格拉","Agra",27.1767,78.0081],
-  ["斋沙默尔","Jaisalmer",26.9157,70.9083],["乌代浦尔","Udaipur",24.5854,73.7125],
-  ["焦特布尔","Jodhpur",26.2389,73.0243],["科钦","Kochi",9.9312,76.2673],
-  ["德拉敦","Dehradun",30.3165,78.0322],["昌迪加尔","Chandigarh",30.7333,76.7794],
-  ["科英巴托尔","Coimbatore",11.0168,76.9558],["马杜赖","Madurai",9.9252,78.1198],
-  // 亚洲其他
-  ["东京","Tokyo",35.6762,139.6503],["大阪","Osaka",34.6937,135.5023],
-  ["首尔","Seoul",37.5665,126.9780],["新加坡","Singapore",1.3521,103.8198],
-  ["曼谷","Bangkok",13.7563,100.5018],["吉隆坡","Kuala Lumpur",3.1390,101.6869],
-  ["雅加达","Jakarta",-6.2088,106.8456],["马尼拉","Manila",14.5995,120.9842],
-  ["河内","Hanoi",21.0285,105.8542],["胡志明市","Ho Chi Minh City",10.8231,106.6297],
-  ["迪拜","Dubai",25.2048,55.2708],["卡拉奇","Karachi",24.8607,67.0011],
-  ["伊斯兰堡","Islamabad",33.6844,73.0479],["拉合尔","Lahore",31.5204,74.3587],
-  ["达卡","Dhaka",23.8103,90.4125],["加德满都","Kathmandu",27.7172,85.3240],
-  ["科伦坡","Colombo",6.9271,79.8612],["仰光","Yangon",16.8661,96.1951],
-  ["德黑兰","Tehran",35.6892,51.3890],["伊斯坦布尔","Istanbul",41.0082,28.9784],
-  // 欧洲
-  ["伦敦","London",51.5074,-0.1278],["巴黎","Paris",48.8566,2.3522],
-  ["柏林","Berlin",52.5200,13.4050],["马德里","Madrid",40.4168,-3.7038],
-  ["罗马","Rome",41.9028,12.4964],["阿姆斯特丹","Amsterdam",52.3676,4.9041],
-  ["维也纳","Vienna",48.2082,16.3738],["苏黎世","Zurich",47.3769,8.5417],
-  ["布鲁塞尔","Brussels",50.8503,4.3517],["斯德哥尔摩","Stockholm",59.3293,18.0686],
-  ["莫斯科","Moscow",55.7558,37.6176],["华沙","Warsaw",52.2297,21.0122],
-  // 美洲
-  ["纽约","New York",40.7128,-74.0060],["洛杉矶","Los Angeles",34.0522,-118.2437],
-  ["芝加哥","Chicago",41.8781,-87.6298],["休斯顿","Houston",29.7604,-95.3698],
-  ["旧金山","San Francisco",37.7749,-122.4194],["西雅图","Seattle",47.6062,-122.3321],
-  ["波士顿","Boston",42.3601,-71.0589],["迈阿密","Miami",25.7617,-80.1918],
-  ["多伦多","Toronto",43.6532,-79.3832],["温哥华","Vancouver",49.2827,-123.1207],
-  ["墨西哥城","Mexico City",19.4326,-99.1332],["圣保罗","Sao Paulo",-23.5505,-46.6333],
-  ["布宜诺斯艾利斯","Buenos Aires",-34.6037,-58.3816],["利马","Lima",-12.0464,-77.0428],
-  // 非洲/大洋洲
-  ["开罗","Cairo",30.0444,31.2357],["拉各斯","Lagos",6.5244,3.3792],
-  ["约翰内斯堡","Johannesburg",-26.2041,28.0473],["内罗毕","Nairobi",-1.2921,36.8219],
-  ["悉尼","Sydney",-33.8688,151.2093],["墨尔本","Melbourne",-37.8136,144.9631],
-  ["奥克兰","Auckland",-36.8485,174.7633],
-];
-
-let cityTimer = null;
-
-function onCityInput(val) {
-  document.getElementById('lat').value = '';
-  document.getElementById('lng').value = '';
-  document.getElementById('city-confirmed').style.display = 'none';
-  clearTimeout(cityTimer);
-  const q = val.trim().toLowerCase();
-  if (q.length < 1) { document.getElementById('city-suggestions').style.display = 'none'; return; }
-  cityTimer = setTimeout(() => searchCities(q), 150);
-}
-
-function searchCities(q) {
-  const matches = CITIES.filter(c =>
-    c[0].toLowerCase().includes(q) || c[1].toLowerCase().includes(q)
-  ).slice(0, 8);
-  const box = document.getElementById('city-suggestions');
-  if (!matches.length) { box.style.display = 'none'; return; }
-  box.innerHTML = matches.map(c => {
-    const label = c[0] + (c[1] !== c[0] ? ' ' + c[1] : '');
-    return '<div onclick="selectCity(' + c[2] + ',' + c[3] + ',\'' + label + '\')" style="padding:10px 14px;cursor:pointer;font-size:0.88rem;border-bottom:1px solid rgba(200,151,58,0.1);line-height:1.5;" onmouseover="this.style.background=\'rgba(200,151,58,0.08)\'" onmouseout="this.style.background=\'\'">' + label + '</div>';
-  }).join('');
-  box.style.display = 'block';
-}
-
-function selectCity(lat, lng, label) {
-  document.getElementById('lat').value = lat;
-  document.getElementById('lng').value = lng;
-  document.getElementById('city-input').value = label;
-  document.getElementById('city-suggestions').style.display = 'none';
-  document.getElementById('city-confirmed').style.display = 'block';
-  document.getElementById('city-confirmed-text').textContent = label + '（' + parseFloat(lat).toFixed(2) + 'N, ' + parseFloat(lng).toFixed(2) + 'E）';
-}
-
-document.addEventListener('click', function(e) {
-  if (!e.target.closest || (!e.target.closest('#city-input') && !e.target.closest('#city-suggestions'))) {
-    var box = document.getElementById('city-suggestions');
-    if (box) box.style.display = 'none';
-  }
-});
-
-// ─── Helpers ─────────────────────────────────────────────────
-function showError(msg) {
-  const el = document.getElementById('error-box');
-  el.textContent = msg;
-  el.classList.add('show');
-}
-
-function hideError() {
-  document.getElementById('error-box').classList.remove('show');
-}
-
-function setProgress(text) {
-  document.getElementById('progress-text').textContent = text;
-}
-
-// Planet name mapping
-const PLANET_NAMES = {
-  Sun: '太阳', Moon: '月亮', Mars: '火星', Mercury: '水星',
-  Jupiter: '木星', Venus: '金星', Saturn: '土星',
-  'North Node': '罗睺', 'South Node': '计都', Rahu: '罗睺', Ketu: '计都',
-  Uranus: '天王星', Neptune: '海王星', Pluto: '冥王星'
-};
-
-const SIGN_NAMES = {
-  Aries: '白羊', Taurus: '金牛', Gemini: '双子', Cancer: '巨蟹',
-  Leo: '狮子', Virgo: '处女', Libra: '天秤', Scorpio: '天蝎',
-  Sagittarius: '射手', Capricorn: '摩羯', Aquarius: '水瓶', Pisces: '双鱼'
-};
-
-function signCN(s) { return SIGN_NAMES[s] || s; }
-function planetCN(p) { return PLANET_NAMES[p] || p; }
-
-// ─── Astro calculation (using free API) ───────────────────────
-async function calcChart(date, time, lat, lng) {
-  // Using astrologer.app free API for planetary positions
-  const dt = `${date}T${time}:00`;
-  const url = `https://astrologer.app/api/v2/subject`;
-
-  // We'll use a CORS proxy to avoid browser restrictions
-  // Using allorigins as a free CORS proxy
-  const apiPayload = {
-    name: "chart",
-    year: parseInt(date.split('-')[0]),
-    month: parseInt(date.split('-')[1]),
-    day: parseInt(date.split('-')[2]),
-    hour: parseInt(time.split(':')[0]),
-    minute: parseInt(time.split(':')[1]),
-    latitude: parseFloat(lat),
-    longitude: parseFloat(lng),
-    city: "birth place",
-    nation: "CN",
-    zodiac_type: "Sidereal",
-    sidereal_mode: "LAHIRI"
-  };
-
-  try {
-    const proxyUrl = `https://api.allorigins.win/post?url=${encodeURIComponent(url)}`;
-    const resp = await fetch(proxyUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: JSON.stringify(apiPayload) })
-    });
-    const proxy = await resp.json();
-    const data = JSON.parse(proxy.contents);
-    return data;
-  } catch(e) {
-    // Fallback: calculate basic chart locally using simplified algorithm
-    return null;
-  }
-}
-
-// Simplified local Vedic chart calculation as fallback
-function calcLocalChart(dateStr, timeStr, lat, lng) {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  const [hour, minute] = timeStr.split(':').map(Number);
-
-  // Julian Day Number
-  const a = Math.floor((14 - month) / 12);
-  const y = year + 4800 - a;
-  const m = month + 12 * a - 3;
-  const JDN = day + Math.floor((153*m+2)/5) + 365*y + Math.floor(y/4) - Math.floor(y/100) + Math.floor(y/400) - 32045;
-  const JD = JDN + (hour - 12 + minute/60) / 24 - lng/360;
-
-  // Ayanamsha (Lahiri) - approx
-  const T = (JD - 2451545.0) / 36525;
-  const ayanamsha = 23.85 + (T * 50.2564) / 3600;
-
-  // Sun's mean longitude
-  const L0 = 280.46646 + 36000.76983 * T;
-  const M = (357.52911 + 35999.05029 * T) * Math.PI / 180;
-  const sunLon = (L0 + 1.914602 * Math.sin(M) + 0.019993 * Math.sin(2*M)) % 360;
-  const sunVedic = ((sunLon - ayanamsha) % 360 + 360) % 360;
-
-  // Moon's mean longitude (simplified)
-  const moonLon = ((218.316 + 13.176396 * (JD - 2451545.0)) % 360 + 360) % 360;
-  const moonVedic = ((moonLon - ayanamsha) % 360 + 360) % 360;
-
-  // Ascendant (simplified)
-  const LST = ((100.4606184 + 36000.7700536*T + lng + (hour + minute/60)*15) % 360 + 360) % 360;
-  const latR = lat * Math.PI / 180;
-  const lstR = LST * Math.PI / 180;
-  const asc = (Math.atan2(Math.cos(lstR), -(Math.sin(lstR)*Math.cos(23.44*Math.PI/180) + Math.tan(latR)*Math.sin(23.44*Math.PI/180))) * 180/Math.PI + 360) % 360;
-  const ascVedic = ((asc - ayanamsha) % 360 + 360) % 360;
-
-  // Other planets (very simplified mean positions)
-  const planets = {
-    Sun: sunVedic,
-    Moon: moonVedic,
-    Mars: ((sunVedic + 40 + Math.sin(T*2)*30) % 360 + 360) % 360,
-    Mercury: ((sunVedic + (Math.sin(M*2)*28 + 20)) % 360 + 360) % 360,
-    Jupiter: ((sunVedic - 60 - T*0.5) % 360 + 360) % 360,
-    Venus: ((sunVedic + (Math.cos(M)*47 + 45)) % 360 + 360) % 360,
-    Saturn: ((sunVedic + 90 + T*0.3) % 360 + 360) % 360,
-    Rahu: ((moonVedic + 180) % 360 + 360) % 360,
-  };
-
-  const SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
-  const NAKSHATRA = ['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
-
-  const getSign = (deg) => SIGNS[Math.floor(deg / 30)];
-  const getDeg = (deg) => (deg % 30).toFixed(2);
-  const getNak = (deg) => NAKSHATRA[Math.floor(deg * 27 / 360)];
-  const getHouse = (planetDeg, ascDeg) => {
-    const diff = ((planetDeg - ascDeg) % 360 + 360) % 360;
-    return Math.floor(diff / 30) + 1;
-  };
-
-  const result = {
-    ascendant: { sign: getSign(ascVedic), degree: getDeg(ascVedic) },
-    planets: {},
-    houses: {},
-    nakshatras: {}
-  };
-
-  for (const [name, deg] of Object.entries(planets)) {
-    result.planets[name] = {
-      sign: getSign(deg),
-      degree: getDeg(deg),
-      house: getHouse(deg, ascVedic),
-      nakshatra: getNak(deg)
-    };
-    result.nakshatras[name] = getNak(deg);
-  }
-
-  // Ketu = opposite Rahu
-  const ketuDeg = ((planets.Rahu + 180) % 360 + 360) % 360;
-  result.planets['Ketu'] = {
-    sign: getSign(ketuDeg),
-    degree: getDeg(ketuDeg),
-    house: getHouse(ketuDeg, ascVedic),
-    nakshatra: getNak(ketuDeg)
-  };
-
-  // Dasha (simplified Vimshottari based on Moon nakshatra)
-  const DASHA_LORDS = ['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
-  const DASHA_YEARS = [7, 20, 6, 10, 7, 18, 16, 19, 17];
-  const moonNakIdx = Math.floor(moonVedic * 27 / 360);
-  const startLordIdx = moonNakIdx % 9;
-  result.currentDasha = {
-    lord: DASHA_LORDS[startLordIdx],
-    years: DASHA_YEARS[startLordIdx]
-  };
-
-  return result;
-}
-
-// ─── DeepSeek API call ───────────────────────────────────────
-async function callClaude(apiKey, prompt) {
-  const resp = await fetch('https://api.deepseek.com/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
-
-  if (!resp.ok) {
-    const err = await resp.json().catch(() => ({}));
-    throw new Error(err.error?.message || `API 错误 ${resp.status}`);
-  }
-
-  const data = await resp.json();
-  return data.choices[0].message.content;
-}
-
-// ─── Toggle module cards ──────────────────────────────────────
-function toggleModule(card) {
-  const cb = card.querySelector('input[type="checkbox"]');
-  cb.checked = !cb.checked;
-  card.classList.toggle('checked', cb.checked);
-}
-
-// ─── Main generate function ───────────────────────────────────
-async function generate() {
-  hideError();
-
-  const name = document.getElementById('name').value.trim() || '你';
-  const birthdate = document.getElementById('birthdate').value;
-  const birthtime = document.getElementById('birthtime').value;
-  const lat = document.getElementById('lat').value;
-  const lng = document.getElementById('lng').value;
-  const apiKey = document.getElementById('apikey').value.trim();
-
-  // Validation
-  if (!birthdate || !birthtime) return showError('请填写完整的出生日期和时间。');
-  if (!lat || !lng) return showError('请输入出生城市并从下拉列表中选择一个结果。');
-  if (!apiKey || !apiKey.startsWith('sk-')) return showError('请填写有效的 DeepSeek API Key（以 sk- 开头）。');
-
-  const selectedModules = [...document.querySelectorAll('#modules-grid input:checked')]
-    .map(cb => cb.dataset.id);
-  if (selectedModules.length === 0) return showError('请至少选择一个解读模块。');
-
-  // UI state
-  document.getElementById('btn-generate').disabled = true;
-  document.getElementById('report').classList.remove('show');
-  document.getElementById('progress').classList.add('show');
-
-  try {
-    // Step 1: Calculate chart
-    setProgress('正在推算星盘位置…');
-    let chart = await calcChart(birthdate, birthtime, lat, lng);
-    if (!chart || !chart.planets) {
-      chart = calcLocalChart(birthdate, birthtime, parseFloat(lat), parseFloat(lng));
+    // --- 1. 获取经纬度 ---
+    async function getCoords(city) {
+        const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`);
+        const d = await r.json();
+        if(!d.length) throw new Error("无法识别城市，请尝试输入英文名。");
+        return { lat: d[0].lat, lon: d[0].lon, name: d[0].display_name };
     }
 
-    // Step 2: Show report header
-    setProgress('星盘计算完成，正在解读命盘…');
-
-    const SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
-
-    document.getElementById('report-name').textContent = `${name} 的命盘解读`;
-    document.getElementById('report-birth-info').textContent =
-      `${birthdate} ${birthtime} · 纬度 ${lat} 经度 ${lng}`;
-
-    // Chart summary
-    const asc = chart.ascendant || chart.planets?.Sun;
-    const moon = chart.planets?.Moon;
-    const sun = chart.planets?.Sun;
-    document.getElementById('chart-summary').innerHTML = `
-      <div class="chart-item">
-        <div class="value">${signCN(asc?.sign || '—')}</div>
-        <div class="key">上升 Lagna</div>
-      </div>
-      <div class="chart-item">
-        <div class="value">${signCN(moon?.sign || '—')}</div>
-        <div class="key">月亮 Chandra</div>
-      </div>
-      <div class="chart-item">
-        <div class="value">${signCN(sun?.sign || '—')}</div>
-        <div class="key">太阳 Surya</div>
-      </div>
-    `;
-
-    // Step 3: Render module placeholders
-    const modulesContainer = document.getElementById('report-modules');
-    modulesContainer.innerHTML = '';
-    for (const id of selectedModules) {
-      const cfg = MODULE_CONFIG[id];
-      modulesContainer.innerHTML += `
-        <div class="module-report" id="module-${id}">
-          <div class="module-report-header">
-            <span class="icon">${cfg.icon}</span>
-            <h3>${cfg.name}</h3>
-          </div>
-          <div class="module-report-body loading" id="body-${id}">星辰正在低语，片刻…</div>
-        </div>
-      `;
+    // --- 2. 获取印占天文数据 ---
+    async function getAstroData(date, time, lat, lon) {
+        const [y, m, d] = date.split('-');
+        const url = `https://api.vedastro.org/Calculate/AllPlanetData/Location/${lon}/${lat}/Time/${time}/${d}/${m}/${y}/+08:00`;
+        const r = await fetch(url);
+        const j = await r.json();
+        return j.Payload;
     }
 
-    document.getElementById('report').classList.add('show');
-    document.getElementById('progress').classList.remove('show');
+    // --- 3. 调用 AI 解读 (去占星化提示词) ---
+    async function getAI(key, name, data) {
+        const prompt = `你是一位顶级的心理学导师和生命教练。我会给你一组结构化的生命能量原始数据。
+        数据如下：${JSON.stringify(data).substring(0, 1500)}
+        
+        请为[${name}]撰写一份深度报告。
+        **必须遵守的规则：**
+        1. 严禁提到任何占星术汇（如：行星、星座、宫位、上升、相位、印度、排盘、大运）。
+        2. 请把这些数据翻译成：深层性格、人际关系模式、潜意识里的家庭影响。
+        3. 语气要优雅、神秘但科学、充满洞察力。
+        4. 报告分为三部分：[核心特质]、[亲密关系]、[原生家庭印记]。
+        
+        请直接输出内容，不要任何开场白。`;
 
-    // Step 4: Generate each module
-    for (const id of selectedModules) {
-      const cfg = MODULE_CONFIG[id];
-      const bodyEl = document.getElementById(`body-${id}`);
-
-      try {
-        const text = await callClaude(apiKey, cfg.prompt(chart));
-        bodyEl.classList.remove('loading');
-        bodyEl.textContent = text;
-      } catch (err) {
-        bodyEl.classList.remove('loading');
-        bodyEl.style.color = 'var(--rust)';
-        bodyEl.textContent = `解读失败：${err.message}`;
-      }
+        const r = await fetch('https://api.deepseek.com/chat/completions', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${key}`},
+            body: JSON.stringify({
+                model: "deepseek-chat",
+                messages: [{role: "user", content: prompt}],
+                temperature: 0.7
+            })
+        });
+        const d = await r.json();
+        return d.choices[0].message.content;
     }
 
-  } catch (err) {
-    document.getElementById('progress').classList.remove('show');
-    showError(`出错了：${err.message}`);
-  } finally {
-    document.getElementById('btn-generate').disabled = false;
-  }
-}
+    // --- 主函数 ---
+    async function run() {
+        const key = document.getElementById('key').value;
+        const city = document.getElementById('city').value;
+        if(!key || !city) return alert("请填写完整信息。");
+
+        document.getElementById('input-panel').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+
+        try {
+            const coords = await getCoords(city);
+            const astro = await getAstroData(
+                document.getElementById('date').value,
+                document.getElementById('time').value,
+                coords.lat, coords.lon
+            );
+            const report = await getAI(key, document.getElementById('name').value, astro);
+
+            // 解析报告内容
+            document.getElementById('out-name').textContent = document.getElementById('name').value + " 的人生蓝图";
+            const parts = report.split('\n\n');
+            document.getElementById('content-ego').textContent = parts[0] || "加载中...";
+            document.getElementById('content-love').textContent = parts[1] || "加载中...";
+            document.getElementById('content-karma').textContent = parts[2] || "加载中...";
+
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('report-container').style.display = 'block';
+            document.getElementById('save-image-btn').style.display = 'block';
+
+        } catch (e) {
+            alert("错误: " + e.message);
+            document.getElementById('input-panel').style.display = 'block';
+            document.getElementById('loader').style.display = 'none';
+        }
+    }
+
+    // --- 截图功能 ---
+    function takeScreenshot() {
+        const target = document.getElementById('report-container');
+        html2canvas(target, {
+            scale: 2, // 高清
+            useCORS: true,
+            backgroundColor: "#f9f6f2"
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Blueprint-${new Date().getTime()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    }
 </script>
+
 </body>
 </html>
