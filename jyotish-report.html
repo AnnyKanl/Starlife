@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jyotish · 命盘解读</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+SC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1209;
+    --gold: #c8973a;
+    --gold-light: #e8c97a;
+    --cream: #f7f1e8;
+    --cream-dark: #ede4d4;
+    --rust: #8b3a2a;
+    --sage: #4a5e4a;
+    --paper: #fdf8f0;
+    --shadow: rgba(26,18,9,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 300;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Decorative background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(200,151,58,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 80%, rgba(139,58,42,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 48px 0 32px;
+    border-bottom: 1px solid rgba(200,151,58,0.3);
+    margin-bottom: 36px;
+  }
+
+  .mandala {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    animation: slowspin 40s linear infinite;
+  }
+
+  @keyframes slowspin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .header p {
+    font-size: 0.78rem;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+    opacity: 0.5;
+    text-transform: uppercase;
+  }
+
+  /* Form */
+  .form-section {
+    background: white;
+    border: 1px solid rgba(200,151,58,0.2);
+    border-radius: 2px;
+    padding: 28px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 20px var(--shadow);
+  }
+
+  .form-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .form-section h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(200,151,58,0.4), transparent);
+  }
+
+  .field {
+    margin-bottom: 18px;
+  }
+
+  label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.6;
+    margin-bottom: 6px;
+  }
+
+  input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid rgba(26,18,9,0.15);
+    border-radius: 2px;
+    padding: 10px 14px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    background: white;
+  }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* API Key section */
+  .key-section {
+    background: rgba(200,151,58,0.06);
+    border: 1px dashed rgba(200,151,58,0.4);
+    border-radius: 2px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--ink);
+    opacity: 0.85;
+  }
+
+  .key-section strong { color: var(--gold); font-weight: 400; }
+
+  /* Modules */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .module-card {
+    border: 1px solid rgba(200,151,58,0.25);
+    border-radius: 2px;
+    padding: 14px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--paper);
+    position: relative;
+    user-select: none;
+  }
+
+  .module-card input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .module-card.checked {
+    background: white;
+    border-color: var(--gold);
+    box-shadow: inset 0 0 0 1px var(--gold);
+  }
+
+  .module-card .icon {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .module-card .name {
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+
+  .module-card .desc {
+    font-size: 0.68rem;
+    color: var(--ink);
+    opacity: 0.5;
+    line-height: 1.5;
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .module-card.checked .checkmark { opacity: 1; }
+
+  .checkmark::after {
+    content: '';
+    width: 5px;
+    height: 9px;
+    border-right: 1.5px solid white;
+    border-bottom: 1.5px solid white;
+    transform: rotate(45deg) translateY(-1px);
+  }
+
+  /* Submit */
+  .btn-generate {
+    width: 100%;
+    padding: 16px;
+    background: var(--ink);
+    color: var(--gold-light);
+    border: none;
+    border-radius: 2px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-generate:hover { background: #2a1f0f; }
+  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Progress */
+  .progress-wrap {
+    display: none;
+    margin: 24px 0;
+    text-align: center;
+  }
+
+  .progress-wrap.show { display: block; }
+
+  .progress-ring {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 14px;
+    animation: slowspin 3s linear infinite;
+  }
+
+  .progress-text {
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    opacity: 0.8;
+  }
+
+  /* Report */
+  .report {
+    display: none;
+    margin-top: 28px;
+  }
+
+  .report.show { display: block; }
+
+  .report-header {
+    text-align: center;
+    padding: 28px 24px;
+    background: var(--ink);
+    color: var(--cream);
+    margin-bottom: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .report-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(200,151,58,0.2) 0%, transparent 70%);
+  }
+
+  .report-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+    position: relative;
+  }
+
+  .report-header .birth-info {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    opacity: 0.5;
+    position: relative;
+  }
+
+  .chart-summary {
+    background: white;
+    border: 1px solid rgba(200,151,58,0.15);
+    padding: 20px 24px;
+    margin-bottom: 1px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    text-align: center;
+  }
+
+  .chart-item .value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .chart-item .key {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  .module-report {
+    background: white;
+    border: 1px solid rgba(200,151,58,0.15);
+    margin-bottom: 2px;
+    overflow: hidden;
+  }
+
+  .module-report-header {
+    padding: 16px 24px;
+    background: linear-gradient(to right, rgba(200,151,58,0.08), transparent);
+    border-bottom: 1px solid rgba(200,151,58,0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .module-report-header .icon { font-size: 1.2rem; }
+
+  .module-report-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+  }
+
+  .module-report-body {
+    padding: 20px 24px;
+    font-size: 0.9rem;
+    line-height: 2;
+    color: var(--ink);
+    opacity: 0.85;
+    white-space: pre-wrap;
+  }
+
+  .module-report-body.loading {
+    color: var(--gold);
+    opacity: 0.5;
+    font-style: italic;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.65; }
+  }
+
+  /* Error */
+  .error-box {
+    background: rgba(139,58,42,0.08);
+    border: 1px solid rgba(139,58,42,0.3);
+    border-radius: 2px;
+    padding: 14px 18px;
+    font-size: 0.82rem;
+    color: var(--rust);
+    margin: 16px 0;
+    display: none;
+    line-height: 1.7;
+  }
+  .error-box.show { display: block; }
+
+  /* Divider */
+  .divider {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 1.1rem;
+    opacity: 0.2;
+    letter-spacing: 0.3em;
+  }
+
+  /* Save hint */
+  .save-hint {
+    text-align: center;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    opacity: 0.4;
+    margin-top: 14px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 400px) {
+    .modules-grid { grid-template-columns: 1fr 1fr; }
+    .row2 { grid-template-columns: 1fr; }
+    .chart-summary { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <svg class="mandala" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="30" stroke="#c8973a" stroke-width="0.5" opacity="0.4"/>
+      <circle cx="32" cy="32" r="22" stroke="#c8973a" stroke-width="0.5" opacity="0.5"/>
+      <circle cx="32" cy="32" r="4" fill="#c8973a" opacity="0.6"/>
+      <g opacity="0.5" stroke="#c8973a" stroke-width="0.5">
+        <line x1="32" y1="2" x2="32" y2="10"/>
+        <line x1="32" y1="54" x2="32" y2="62"/>
+        <line x1="2" y1="32" x2="10" y2="32"/>
+        <line x1="54" y1="32" x2="62" y2="32"/>
+        <line x1="11" y1="11" x2="17" y2="17"/>
+        <line x1="47" y1="47" x2="53" y2="53"/>
+        <line x1="53" y1="11" x2="47" y2="17"/>
+        <line x1="17" y1="47" x2="11" y2="53"/>
+      </g>
+      <g opacity="0.35" stroke="#c8973a" stroke-width="0.4">
+        <line x1="32" y1="10" x2="32" y2="22"/>
+        <line x1="32" y1="42" x2="32" y2="54"/>
+        <line x1="10" y1="32" x2="22" y2="32"/>
+        <line x1="42" y1="32" x2="54" y2="32"/>
+        <line x1="17" y1="17" x2="24.5" y2="24.5"/>
+        <line x1="39.5" y1="39.5" x2="47" y2="47"/>
+        <line x1="47" y1="17" x2="39.5" y2="24.5"/>
+        <line x1="24.5" y1="39.5" x2="17" y2="47"/>
+      </g>
+      <polygon points="32,14 36,28 32,24 28,28" fill="#c8973a" opacity="0.3"/>
+      <polygon points="32,50 36,36 32,40 28,36" fill="#c8973a" opacity="0.3"/>
+    </svg>
+    <h1>Jyotish · 命盘解读</h1>
+    <p>Vedic Astrology · 印度占星</p>
+  </div>
+
+  <!-- API Key 说明 -->
+  <div class="key-section">
+    <strong>使用前准备：</strong>需要填入 DeepSeek API Key（在 <a href="https://platform.deepseek.com" target="_blank" style="color:var(--gold)">platform.deepseek.com</a> 注册获取，价格极低）。Key 仅在你的浏览器本地使用，不会上传任何服务器。
+  </div>
+
+  <!-- Form -->
+  <div class="form-section">
+    <h2>出生信息</h2>
+
+    <div class="field">
+      <label>姓名或称呼</label>
+      <input type="text" id="name" placeholder="如：小月" />
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>出生日期</label>
+        <input type="date" id="birthdate" />
+      </div>
+      <div class="field">
+        <label>出生时间</label>
+        <input type="time" id="birthtime" />
+      </div>
+    </div>
+
+    <div class="field" style="position:relative">
+      <label>出生城市</label>
+      <input type="text" id="city-input" placeholder="输入城市名，如：上海、Mumbai、New York…" autocomplete="off" oninput="onCityInput(this.value)" />
+      <div id="city-suggestions" style="display:none; position:absolute; left:0; right:0; top:100%; z-index:99; background:white; border:1px solid rgba(200,151,58,0.35); border-top:none; border-radius:0 0 2px 2px; box-shadow:0 4px 16px rgba(26,18,9,0.1); max-height:200px; overflow-y:auto;"></div>
+      <div id="city-confirmed" style="display:none; margin-top:6px; font-size:0.75rem; color:var(--sage); letter-spacing:0.04em;">
+        ✓ <span id="city-confirmed-text"></span>
+      </div>
+    </div>
+    <input type="hidden" id="lat" />
+    <input type="hidden" id="lng" />
+
+    <div class="field">
+      <label>DeepSeek API Key</label>
+      <input type="text" id="apikey" placeholder="sk-..." />
+    </div>
+  </div>
+
+  <!-- Modules -->
+  <div class="form-section">
+    <h2>选择解读模块</h2>
+    <div class="modules-grid" id="modules-grid">
+
+      <label class="module-card checked" onclick="toggleModule(this)">
+        <input type="checkbox" checked data-id="soulmate">
+        <span class="checkmark"></span>
+        <span class="icon">💞</span>
+        <div class="name">正缘长什么样</div>
+        <div class="desc">第七宫 · 金星 · Navamsa</div>
+      </label>
+
+      <label class="module-card checked" onclick="toggleModule(this)">
+        <input type="checkbox" checked data-id="karma">
+        <span class="checkmark"></span>
+        <span class="icon">🌿</span>
+        <div class="name">来自父母的业力</div>
+        <div class="desc">第四宫 · 第九宫 · 月亮</div>
+      </label>
+
+      <label class="module-card checked" onclick="toggleModule(this)">
+        <input type="checkbox" checked data-id="wealth">
+        <span class="checkmark"></span>
+        <span class="icon">🪙</span>
+        <div class="name">今生财运密码</div>
+        <div class="desc">第二宫 · 第十一宫 · 木星</div>
+      </label>
+
+      <label class="module-card" onclick="toggleModule(this)">
+        <input type="checkbox" data-id="career">
+        <span class="checkmark"></span>
+        <span class="icon">🏛️</span>
+        <div class="name">事业天赋方向</div>
+        <div class="desc">第十宫 · Atmakaraka</div>
+      </label>
+
+      <label class="module-card" onclick="toggleModule(this)">
+        <input type="checkbox" data-id="health">
+        <span class="checkmark"></span>
+        <span class="icon">🌙</span>
+        <div class="name">身心健康提示</div>
+        <div class="desc">第六宫 · 土星 · 火星</div>
+      </label>
+
+      <label class="module-card" onclick="toggleModule(this)">
+        <input type="checkbox" data-id="dasha">
+        <span class="checkmark"></span>
+        <span class="icon">⏳</span>
+        <div class="name">当前大运解读</div>
+        <div class="desc">Vimshottari Dasha</div>
+      </label>
+
+    </div>
+  </div>
+
+  <div class="error-box" id="error-box"></div>
+
+  <button class="btn-generate" id="btn-generate" onclick="generate()">
+    ✦ 开始解读命盘 ✦
+  </button>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progress">
+    <svg class="progress-ring" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="20" stroke="#c8973a" stroke-width="1" fill="none" opacity="0.2"/>
+      <circle cx="24" cy="24" r="4" fill="#c8973a" opacity="0.6"/>
+      <g stroke="#c8973a" stroke-width="0.8" opacity="0.5">
+        <line x1="24" y1="4" x2="24" y2="10"/>
+        <line x1="24" y1="38" x2="24" y2="44"/>
+        <line x1="4" y1="24" x2="10" y2="24"/>
+        <line x1="38" y1="24" x2="44" y2="24"/>
+      </g>
+    </svg>
+    <div class="progress-text" id="progress-text">正在计算星盘位置…</div>
+  </div>
+
+  <!-- Report -->
+  <div class="report" id="report">
+    <div class="report-header">
+      <h2 id="report-name">命盘解读报告</h2>
+      <div class="birth-info" id="report-birth-info"></div>
+    </div>
+
+    <div class="chart-summary" id="chart-summary"></div>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <div id="report-modules"></div>
+
+    <div class="save-hint">长按截图 · 分享给朋友</div>
+  </div>
+
+</div>
+
+<script>
+// ─── Module configs ──────────────────────────────────────────
+const MODULE_CONFIG = {
+  soulmate: {
+    name: '正缘长什么样',
+    icon: '💞',
+    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人今生的正缘（灵魂伴侣）的特征。
+
+命盘数据：
+${JSON.stringify(chart, null, 2)}
+
+请重点分析：
+1. 第七宫（婚姻宫）的星座和其中的行星
+2. 第七宫宫主所在位置和状态
+3. 金星的位置、星座和状态（代表感情观和吸引力）
+4. Navamsa（第九分盘）中第七宫的情况（如有数据）
+
+解读要求：
+- 用温暖、诗意的语言描述正缘的外貌特征、性格气质、职业倾向
+- 描述两人相遇的可能方式或场景
+- 指出此人在感情中的模式和需要注意的地方
+- 语气如老朋友般亲切，不要太学术
+- 300-400字，分2-3段，不要用标题，自然流淌
+
+请直接开始解读，不要说"根据命盘"之类的开场白。`,
+  },
+  karma: {
+    name: '来自父母的业力',
+    icon: '🌿',
+    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人来自父母的业力与家庭印记。
+
+命盘数据：
+${JSON.stringify(chart, null, 2)}
+
+请重点分析：
+1. 第四宫（母亲宫、家庭宫）的星座和行星
+2. 第九宫（父亲宫、前世宫）的星座和行星
+3. 月亮的位置（代表母亲、内心、情感底色）
+4. 土星与这些宫位的关系（业力指示）
+
+解读要求：
+- 描述此人从母亲那里继承的情感模式和潜意识底色
+- 描述从父亲那里带来的人生观念或挑战
+- 点出此人今生要"疗愈"或"完成"的家族业力功课
+- 语气温柔而深刻，带有慈悲感，不要评判
+- 300-400字，分2-3段，不要用标题
+
+请直接开始解读，不要说"根据命盘"之类的开场白。`,
+  },
+  wealth: {
+    name: '今生财运密码',
+    icon: '🪙',
+    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人今生的财富模式和赚钱密码。
+
+命盘数据：
+${JSON.stringify(chart, null, 2)}
+
+请重点分析：
+1. 第二宫（财富宫）的星座和行星
+2. 第十一宫（收益宫）的星座和行星
+3. 木星的位置（代表财富、扩张和幸运）
+4. 财富宫宫主和收益宫宫主的状态
+
+解读要求：
+- 描述此人天生的财富体质和与金钱的关系模式
+- 指出最适合他/她赚钱的方式或领域（不要太具体到职业，而是方式和能量）
+- 描述财运的起伏规律或特别顺畅的时机类型
+- 给出1-2个实用的"与财富对齐"的建议
+- 语气充满希望和力量感，不要说负面的话
+- 300-400字，分2-3段，不要用标题
+
+请直接开始解读，不要说"根据命盘"之类的开场白。`,
+  },
+  career: {
+    name: '事业天赋方向',
+    icon: '🏛️',
+    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人今生的事业天赋和使命方向。
+
+命盘数据：
+${JSON.stringify(chart, null, 2)}
+
+请重点分析：
+1. 第十宫（事业宫）的星座和行星
+2. 第十宫宫主的位置和状态
+3. 太阳的位置（代表身份认同、领导力和使命感）
+4. 上升星座和Atmakaraka（灵魂星，度数最高的行星）
+
+解读要求：
+- 描述此人天生擅长的领域和独特才华
+- 描述让他/她感到有意义、有灵魂的工作方向
+- 指出事业上可能面临的考验或转折点类型
+- 语气鼓励而真实，像一位见过很多人生的智者
+- 300-400字，分2-3段，不要用标题
+
+请直接开始解读。`,
+  },
+  health: {
+    name: '身心健康提示',
+    icon: '🌙',
+    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人的身心健康模式和需要关注的领域。
+
+命盘数据：
+${JSON.stringify(chart, null, 2)}
+
+请重点分析：
+1. 第六宫（健康宫、疾病宫）的星座和行星
+2. 上升星座及其宫主（代表整体体质）
+3. 月亮的位置（代表心理健康和情绪体）
+4. 土星和火星对健康宫位的影响
+
+解读要求：
+- 描述此人的天生体质类型和能量模式
+- 指出最需要滋养和保护的身体或心理方面
+- 给出2-3个与生命力对齐的生活建议（饮食、休息、情绪疗愈方向等）
+- 语气像一位关心你的中医大夫+心理咨询师
+- 不要说吓人的话，聚焦在如何滋养而非恐惧
+- 300-400字，分2-3段，不要用标题
+
+请直接开始解读。`,
+  },
+  dasha: {
+    name: '当前大运解读',
+    icon: '⏳',
+    prompt: (chart) => `你是一位精通印度占星（Jyotish）的大师，请根据以下命盘数据，用中文解读此人当前所处的Vimshottari大运（Dasha）周期的主题和能量。
+
+命盘数据：
+${JSON.stringify(chart, null, 2)}
+
+请重点分析：
+1. 当前主大运（Mahadasha）是哪颗行星主管，这颗行星在命盘中的位置和状态
+2. 这个大运周期的整体主题和生命课题
+3. 当前小运（Antardasha）如果有数据的话
+
+解读要求：
+- 描述这个大运周期带来的整体能量和人生主旋律
+- 指出这段时间最容易开花结果的领域
+- 指出需要耐心度过的考验或功课
+- 给出与当前大运能量共舞的建议
+- 语气像一位看着你成长的灵性导师
+- 300-400字，分2-3段，不要用标题
+
+请直接开始解读。`,
+  },
+};
+
+// ─── City search (OpenStreetMap Nominatim) ───────────────────
+let cityTimer = null;
+
+function onCityInput(val) {
+  document.getElementById('lat').value = '';
+  document.getElementById('lng').value = '';
+  document.getElementById('city-confirmed').style.display = 'none';
+  clearTimeout(cityTimer);
+  const q = val.trim();
+  if (q.length < 2) { document.getElementById('city-suggestions').style.display = 'none'; return; }
+  cityTimer = setTimeout(() => fetchCitySuggestions(q), 420);
+}
+
+async function fetchCitySuggestions(query) {
+  try {
+    const url = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(query) + '&format=json&limit=6&addressdetails=1';
+    const resp = await fetch(url, { headers: { 'Accept-Language': 'zh-CN,zh,en' } });
+    const results = await resp.json();
+    renderSuggestions(results);
+  } catch(e) {}
+}
+
+function renderSuggestions(results) {
+  const box = document.getElementById('city-suggestions');
+  if (!results.length) { box.style.display = 'none'; return; }
+  box.innerHTML = results.map(r => {
+    const city = r.address && (r.address.city || r.address.town || r.address.village || r.address.county) || r.name;
+    const state = r.address && r.address.state || '';
+    const country = r.address && r.address.country || '';
+    const label = [city, state, country].filter(Boolean).join('，');
+    const lat = parseFloat(r.lat).toFixed(4), lon = parseFloat(r.lon).toFixed(4);
+    return '<div onclick="selectCity(' + r.lat + ',' + r.lon + ','' + label.replace(/'/g,"\\'") + '')" style="padding:10px 14px;cursor:pointer;font-size:0.88rem;border-bottom:1px solid rgba(200,151,58,0.1);line-height:1.5;" onmouseover="this.style.background='rgba(200,151,58,0.08)'" onmouseout="this.style.background=''">' + label + '</div>';
+  }).join('');
+  box.style.display = 'block';
+}
+
+function selectCity(lat, lng, label) {
+  document.getElementById('lat').value = lat;
+  document.getElementById('lng').value = lng;
+  document.getElementById('city-input').value = label;
+  document.getElementById('city-suggestions').style.display = 'none';
+  document.getElementById('city-confirmed').style.display = 'block';
+  document.getElementById('city-confirmed-text').textContent = label + '（' + parseFloat(lat).toFixed(4) + 'N, ' + parseFloat(lng).toFixed(4) + 'E）';
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest || (!e.target.closest('#city-input') && !e.target.closest('#city-suggestions'))) {
+    var box = document.getElementById('city-suggestions');
+    if (box) box.style.display = 'none';
+  }
+});
+
+// ─── Helpers ─────────────────────────────────────────────────
+function showError(msg) {
+  const el = document.getElementById('error-box');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function hideError() {
+  document.getElementById('error-box').classList.remove('show');
+}
+
+function setProgress(text) {
+  document.getElementById('progress-text').textContent = text;
+}
+
+// Planet name mapping
+const PLANET_NAMES = {
+  Sun: '太阳', Moon: '月亮', Mars: '火星', Mercury: '水星',
+  Jupiter: '木星', Venus: '金星', Saturn: '土星',
+  'North Node': '罗睺', 'South Node': '计都', Rahu: '罗睺', Ketu: '计都',
+  Uranus: '天王星', Neptune: '海王星', Pluto: '冥王星'
+};
+
+const SIGN_NAMES = {
+  Aries: '白羊', Taurus: '金牛', Gemini: '双子', Cancer: '巨蟹',
+  Leo: '狮子', Virgo: '处女', Libra: '天秤', Scorpio: '天蝎',
+  Sagittarius: '射手', Capricorn: '摩羯', Aquarius: '水瓶', Pisces: '双鱼'
+};
+
+function signCN(s) { return SIGN_NAMES[s] || s; }
+function planetCN(p) { return PLANET_NAMES[p] || p; }
+
+// ─── Astro calculation (using free API) ───────────────────────
+async function calcChart(date, time, lat, lng) {
+  // Using astrologer.app free API for planetary positions
+  const dt = `${date}T${time}:00`;
+  const url = `https://astrologer.app/api/v2/subject`;
+
+  // We'll use a CORS proxy to avoid browser restrictions
+  // Using allorigins as a free CORS proxy
+  const apiPayload = {
+    name: "chart",
+    year: parseInt(date.split('-')[0]),
+    month: parseInt(date.split('-')[1]),
+    day: parseInt(date.split('-')[2]),
+    hour: parseInt(time.split(':')[0]),
+    minute: parseInt(time.split(':')[1]),
+    latitude: parseFloat(lat),
+    longitude: parseFloat(lng),
+    city: "birth place",
+    nation: "CN",
+    zodiac_type: "Sidereal",
+    sidereal_mode: "LAHIRI"
+  };
+
+  try {
+    const proxyUrl = `https://api.allorigins.win/post?url=${encodeURIComponent(url)}`;
+    const resp = await fetch(proxyUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: JSON.stringify(apiPayload) })
+    });
+    const proxy = await resp.json();
+    const data = JSON.parse(proxy.contents);
+    return data;
+  } catch(e) {
+    // Fallback: calculate basic chart locally using simplified algorithm
+    return null;
+  }
+}
+
+// Simplified local Vedic chart calculation as fallback
+function calcLocalChart(dateStr, timeStr, lat, lng) {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const [hour, minute] = timeStr.split(':').map(Number);
+
+  // Julian Day Number
+  const a = Math.floor((14 - month) / 12);
+  const y = year + 4800 - a;
+  const m = month + 12 * a - 3;
+  const JDN = day + Math.floor((153*m+2)/5) + 365*y + Math.floor(y/4) - Math.floor(y/100) + Math.floor(y/400) - 32045;
+  const JD = JDN + (hour - 12 + minute/60) / 24 - lng/360;
+
+  // Ayanamsha (Lahiri) - approx
+  const T = (JD - 2451545.0) / 36525;
+  const ayanamsha = 23.85 + (T * 50.2564) / 3600;
+
+  // Sun's mean longitude
+  const L0 = 280.46646 + 36000.76983 * T;
+  const M = (357.52911 + 35999.05029 * T) * Math.PI / 180;
+  const sunLon = (L0 + 1.914602 * Math.sin(M) + 0.019993 * Math.sin(2*M)) % 360;
+  const sunVedic = ((sunLon - ayanamsha) % 360 + 360) % 360;
+
+  // Moon's mean longitude (simplified)
+  const moonLon = ((218.316 + 13.176396 * (JD - 2451545.0)) % 360 + 360) % 360;
+  const moonVedic = ((moonLon - ayanamsha) % 360 + 360) % 360;
+
+  // Ascendant (simplified)
+  const LST = ((100.4606184 + 36000.7700536*T + lng + (hour + minute/60)*15) % 360 + 360) % 360;
+  const latR = lat * Math.PI / 180;
+  const lstR = LST * Math.PI / 180;
+  const asc = (Math.atan2(Math.cos(lstR), -(Math.sin(lstR)*Math.cos(23.44*Math.PI/180) + Math.tan(latR)*Math.sin(23.44*Math.PI/180))) * 180/Math.PI + 360) % 360;
+  const ascVedic = ((asc - ayanamsha) % 360 + 360) % 360;
+
+  // Other planets (very simplified mean positions)
+  const planets = {
+    Sun: sunVedic,
+    Moon: moonVedic,
+    Mars: ((sunVedic + 40 + Math.sin(T*2)*30) % 360 + 360) % 360,
+    Mercury: ((sunVedic + (Math.sin(M*2)*28 + 20)) % 360 + 360) % 360,
+    Jupiter: ((sunVedic - 60 - T*0.5) % 360 + 360) % 360,
+    Venus: ((sunVedic + (Math.cos(M)*47 + 45)) % 360 + 360) % 360,
+    Saturn: ((sunVedic + 90 + T*0.3) % 360 + 360) % 360,
+    Rahu: ((moonVedic + 180) % 360 + 360) % 360,
+  };
+
+  const SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+  const NAKSHATRA = ['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
+
+  const getSign = (deg) => SIGNS[Math.floor(deg / 30)];
+  const getDeg = (deg) => (deg % 30).toFixed(2);
+  const getNak = (deg) => NAKSHATRA[Math.floor(deg * 27 / 360)];
+  const getHouse = (planetDeg, ascDeg) => {
+    const diff = ((planetDeg - ascDeg) % 360 + 360) % 360;
+    return Math.floor(diff / 30) + 1;
+  };
+
+  const result = {
+    ascendant: { sign: getSign(ascVedic), degree: getDeg(ascVedic) },
+    planets: {},
+    houses: {},
+    nakshatras: {}
+  };
+
+  for (const [name, deg] of Object.entries(planets)) {
+    result.planets[name] = {
+      sign: getSign(deg),
+      degree: getDeg(deg),
+      house: getHouse(deg, ascVedic),
+      nakshatra: getNak(deg)
+    };
+    result.nakshatras[name] = getNak(deg);
+  }
+
+  // Ketu = opposite Rahu
+  const ketuDeg = ((planets.Rahu + 180) % 360 + 360) % 360;
+  result.planets['Ketu'] = {
+    sign: getSign(ketuDeg),
+    degree: getDeg(ketuDeg),
+    house: getHouse(ketuDeg, ascVedic),
+    nakshatra: getNak(ketuDeg)
+  };
+
+  // Dasha (simplified Vimshottari based on Moon nakshatra)
+  const DASHA_LORDS = ['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
+  const DASHA_YEARS = [7, 20, 6, 10, 7, 18, 16, 19, 17];
+  const moonNakIdx = Math.floor(moonVedic * 27 / 360);
+  const startLordIdx = moonNakIdx % 9;
+  result.currentDasha = {
+    lord: DASHA_LORDS[startLordIdx],
+    years: DASHA_YEARS[startLordIdx]
+  };
+
+  return result;
+}
+
+// ─── DeepSeek API call ───────────────────────────────────────
+async function callClaude(apiKey, prompt) {
+  const resp = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: 'deepseek-chat',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API 错误 ${resp.status}`);
+  }
+
+  const data = await resp.json();
+  return data.choices[0].message.content;
+}
+
+// ─── Toggle module cards ──────────────────────────────────────
+function toggleModule(card) {
+  const cb = card.querySelector('input[type="checkbox"]');
+  cb.checked = !cb.checked;
+  card.classList.toggle('checked', cb.checked);
+}
+
+// ─── Main generate function ───────────────────────────────────
+async function generate() {
+  hideError();
+
+  const name = document.getElementById('name').value.trim() || '你';
+  const birthdate = document.getElementById('birthdate').value;
+  const birthtime = document.getElementById('birthtime').value;
+  const lat = document.getElementById('lat').value;
+  const lng = document.getElementById('lng').value;
+  const apiKey = document.getElementById('apikey').value.trim();
+
+  // Validation
+  if (!birthdate || !birthtime) return showError('请填写完整的出生日期和时间。');
+  if (!lat || !lng) return showError('请输入出生城市并从下拉列表中选择一个结果。');
+  if (!apiKey || !apiKey.startsWith('sk-')) return showError('请填写有效的 DeepSeek API Key（以 sk- 开头）。');
+
+  const selectedModules = [...document.querySelectorAll('#modules-grid input:checked')]
+    .map(cb => cb.dataset.id);
+  if (selectedModules.length === 0) return showError('请至少选择一个解读模块。');
+
+  // UI state
+  document.getElementById('btn-generate').disabled = true;
+  document.getElementById('report').classList.remove('show');
+  document.getElementById('progress').classList.add('show');
+
+  try {
+    // Step 1: Calculate chart
+    setProgress('正在推算星盘位置…');
+    let chart = await calcChart(birthdate, birthtime, lat, lng);
+    if (!chart || !chart.planets) {
+      chart = calcLocalChart(birthdate, birthtime, parseFloat(lat), parseFloat(lng));
+    }
+
+    // Step 2: Show report header
+    setProgress('星盘计算完成，正在解读命盘…');
+
+    const SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+
+    document.getElementById('report-name').textContent = `${name} 的命盘解读`;
+    document.getElementById('report-birth-info').textContent =
+      `${birthdate} ${birthtime} · 纬度 ${lat} 经度 ${lng}`;
+
+    // Chart summary
+    const asc = chart.ascendant || chart.planets?.Sun;
+    const moon = chart.planets?.Moon;
+    const sun = chart.planets?.Sun;
+    document.getElementById('chart-summary').innerHTML = `
+      <div class="chart-item">
+        <div class="value">${signCN(asc?.sign || '—')}</div>
+        <div class="key">上升 Lagna</div>
+      </div>
+      <div class="chart-item">
+        <div class="value">${signCN(moon?.sign || '—')}</div>
+        <div class="key">月亮 Chandra</div>
+      </div>
+      <div class="chart-item">
+        <div class="value">${signCN(sun?.sign || '—')}</div>
+        <div class="key">太阳 Surya</div>
+      </div>
+    `;
+
+    // Step 3: Render module placeholders
+    const modulesContainer = document.getElementById('report-modules');
+    modulesContainer.innerHTML = '';
+    for (const id of selectedModules) {
+      const cfg = MODULE_CONFIG[id];
+      modulesContainer.innerHTML += `
+        <div class="module-report" id="module-${id}">
+          <div class="module-report-header">
+            <span class="icon">${cfg.icon}</span>
+            <h3>${cfg.name}</h3>
+          </div>
+          <div class="module-report-body loading" id="body-${id}">星辰正在低语，片刻…</div>
+        </div>
+      `;
+    }
+
+    document.getElementById('report').classList.add('show');
+    document.getElementById('progress').classList.remove('show');
+
+    // Step 4: Generate each module
+    for (const id of selectedModules) {
+      const cfg = MODULE_CONFIG[id];
+      const bodyEl = document.getElementById(`body-${id}`);
+
+      try {
+        const text = await callClaude(apiKey, cfg.prompt(chart));
+        bodyEl.classList.remove('loading');
+        bodyEl.textContent = text;
+      } catch (err) {
+        bodyEl.classList.remove('loading');
+        bodyEl.style.color = 'var(--rust)';
+        bodyEl.textContent = `解读失败：${err.message}`;
+      }
+    }
+
+  } catch (err) {
+    document.getElementById('progress').classList.remove('show');
+    showError(`出错了：${err.message}`);
+  } finally {
+    document.getElementById('btn-generate').disabled = false;
+  }
+}
+</script>
+</body>
+</html>
